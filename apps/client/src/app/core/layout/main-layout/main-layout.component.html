@@ -1,0 +1,69 @@
+<mat-toolbar color="primary">
+  <span class="brand">Jeera</span>
+
+  <ng-container *ngIf="signedIn$ | async">
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/tickets"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>list</mat-icon>
+      Backlog
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/tickets/board"
+      routerLinkActive="active"
+      disabled
+    >
+      <mat-icon>dashboard</mat-icon>
+      Board
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/users"
+      routerLinkActive="active"
+    >
+      <mat-icon>manage_accounts</mat-icon>
+      Manage Users
+    </button>
+  </ng-container>
+
+  <span class="navbar-spacer"></span>
+
+  <ng-container
+    *ngIf="signedIn$ | async as signedInUser; else signupOrSignout"
+  >
+    <button mat-flat-button color="primary" (click)="signOut()">
+      <mat-icon>logout</mat-icon>
+      Sign Out ({{ signedInUser.name }})
+    </button>
+  </ng-container>
+
+  <ng-template #signupOrSignout>
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/auth/signup"
+      routerLinkActive="active"
+    >
+      <mat-icon>person_add</mat-icon>
+      Sign Up
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/auth/signin"
+      routerLinkActive="active"
+    >
+      <mat-icon>login</mat-icon>
+      Sign In
+    </button>
+  </ng-template>
+</mat-toolbar>

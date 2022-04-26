@@ -1,1 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'styles/angular-material-theme';
+@import 'styles/variables';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+
+// Import Bootstrap Reboot
+@import '~bootstrap/scss/root'; // Contains :root CSS variables used by other Bootstrap files
+@import '~bootstrap/scss/reboot';
+
+@import '~bootstrap/scss/containers'; // Add .container and .container-fluid classes
+@import '~bootstrap/scss/grid'; // Add the grid system
+
+// Helpers
+@import '~bootstrap/scss/helpers';
+
+// Utilities
+@import '~bootstrap/scss/utilities/api';
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+}
+
+.content-container {
+  width: 60%;
+  margin: 1rem auto 3rem;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

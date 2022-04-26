@@ -103,3 +103,72 @@ Nx Cloud pairs with Nx in order to enable you to build and test code more rapidl
 Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
+
+
+## Client GH pages deployment
+
+### Dependency
+
+npm i angular-cli-ghpages --save-dev
+
+### Steps
+
+ng build --prod --base-href "https://GitHubUserName.github.io/GitHubfolderName/"
+
+angular-cli-ghpages --dir=dist/client
+
+or use script: `npm run deploy:gh`
+
+## To do
+
+- [ ] better error handling (interceptor, error pages)
+- [ ] separate sign-out page (?)
+- [ ] sign-up view
+  - [ ] validation should not be triggered on submitting
+  - [ ] email uniqueness checked only on submit
+  - [ ] separate "show password" buttons for "password" and "password confirmation"
+  - [ ] password mismatch error visible only under password confirmation
+- [ ] sign-in
+  - [ ] show email/password errors below corresponding input field
+- [ ] tickets
+  - [x] tickets resolver
+  - [x] disabled author field in "create ticket" modal filled with currently signed-in user's name
+  - [x] editing existing tickets
+  - [x] enable table pagination
+  - [x] drag & drop breaks pagination
+  - [ ] add "environment" field (FE and BE)
+  - [ ] implement sorting tickets table (by default sort by createdAt desc)
+  - [ ] include ticket id in details modal when updating
+  - [ ] change formatting for priority and status in table (remove underscore and add title case)
+  - [ ] removing tickets (only soft delete)
+  - [ ] "Done" and "Cancelled" should be hidden by default (but searchable)
+  - [ ] correctly sort tickets by position (if not null) or by createdAt date
+  - [ ] store new tickets positions in the Database
+  - [ ] comments visible under corresponding tickets
+  - [ ] adding new comments
+  - [ ] editing (only) own comments
+  - [ ] adding attachments to tickets (uploads)
+  - [ ] adding attachments to comments (uploads) (?)
+  - [ ] WYSIWYG editor in ticket description
+  - [ ] WYSIWYG editor in comment field
+  - [ ] board view
+  - [ ] adding/removing tickets categories
+  - [ ] move inline styles to scss files
+- [ ] users
+  - [x] users resolver
+  - [ ] editing users data, changing role and active state
+  - [ ] adding users
+  - [ ] deleting users (soft delete)
+  - [ ] move inline styles to scss files
+  - [ ] user profiles
+  - [ ] avatars
+- [ ] implement authorisation/roles management
+- [ ] events logging (audit)
+- [ ] sending messages between users
+- [ ] SSO with Gmail?
+- [ ] use websockets
+  - [ ] show user online status
+  - [ ] add chat
+- [ ] color themes (light, dark, etc.)
+- [ ] add more languages (i18n)
+- [ ] dockerize the whole application

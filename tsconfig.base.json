@@ -15,7 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jeera/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@jeera/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@core/*": ["apps/client/src/app/core/*"],
+      "@shared/*": ["apps/client/src/app/shared/*"],
+      "@auth/*": ["apps/client/src/app/features/auth/*"],
+      "@tickets/*": ["apps/client/src/app/features/tickets/*"],
+      "@users-management/*": ["apps/client/src/app/features/users-management/*"],
+      "@environments/*": ["apps/client/src/environments/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,9 +1,6 @@
-<div style="text-align: center">
-  <h1>Welcome to client!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Fast and Extensible Build System"
-  />
+<app-main-layout></app-main-layout>
+
+
+<div class="content-container">
+  <router-outlet></router-outlet>
 </div>
-<div>Message: {{ hello$ | async | json }}</div>
