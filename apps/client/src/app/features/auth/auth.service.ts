@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, ReplaySubject, tap } from 'rxjs';
-import { environment } from '@environments/environment';
-import { User } from '@core/models';
+import { environment } from '@client/environments/environment';
+import { User } from '@client/core/models';
 import {
   CheckAuthRes,
   SignInCredentials,
   SignInRes,
   SignUpCredentials,
   SignUpRes,
-} from '@auth/models';
+} from '@client/auth/models';
 
 @Injectable({
   providedIn: 'root',

@@ -10,7 +10,10 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": [
+              "@api",
+              "@client"
+            ],
             "depConstraints": [
               {
                 "sourceTag": "*",
@@ -18,7 +21,8 @@
               }
             ]
           }
-        ]
+        ],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
       }
     },
     {

@@ -7,8 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { FormService } from '@core/services/form.service';
-import { InputType } from '@shared/models/form';
+import { FormService } from '@client/core/services/form.service';
+import { InputType } from '@client/shared/models/form';
 import { MatchPasswordValidator } from '../validators/match-password.validator';
 import { UniqueEmailValidator } from '../validators/unique-email.validator';
 import { AuthService } from '../auth.service';

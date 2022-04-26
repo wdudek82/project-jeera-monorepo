@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { UsersManagementRoutingModule } from './users-management-routing.module';
 import { UsersManagementComponent } from './users-management.component';
-import {SharedModule} from '@shared/shared.module';
+import {SharedModule} from '@client/shared/shared.module';
 
 
 @NgModule({

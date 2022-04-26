@@ -5,8 +5,8 @@ import {
   ActivatedRouteSnapshot,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { TicketsService } from '@tickets/tickets.service';
-import { Ticket } from '@tickets/models';
+import { TicketsService } from '@client/tickets/tickets.service';
+import { Ticket } from '@client/tickets/models';
 
 @Injectable({
   providedIn: 'root',

@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BacklogComponent } from './components/backlog/backlog.component';
 import { BoardComponent } from './components/board/board.component';
-import { AuthGuard } from '@auth/guards/auth.guard';
-import { TicketsResolver } from '@tickets/tickets.resolver';
-import { UsersResolver } from '@core/resolvers/users.resolver';
-import { SignedInUserResolver } from '@auth/resolvers/signed-in-user.resolver';
+import { AuthGuard } from '@client/auth/guards/auth.guard';
+import { TicketsResolver } from '@client/tickets/tickets.resolver';
+import { UsersResolver } from '@client/core/resolvers/users.resolver';
+import { SignedInUserResolver } from '@client/auth/resolvers/signed-in-user.resolver';
 
 const routes: Routes = [
   {

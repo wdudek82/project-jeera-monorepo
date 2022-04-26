@@ -8,11 +8,11 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '@core/models';
-import { FormService } from '@core/services/form.service';
-import { PROJECT_ALIAS } from '@core/models/constants';
-import { Priority, Ticket, TicketStatus } from '@tickets/models';
-import { TicketsService } from '@tickets/tickets.service';
+import { User } from '@client/core/models';
+import { FormService } from '@client/core/services/form.service';
+import { PROJECT_ALIAS } from '@client/core/models/constants';
+import { Priority, Ticket, TicketStatus } from '@client/tickets/models';
+import { TicketsService } from '@client/tickets/tickets.service';
 
 export interface TicketModalData {
   tickets: Ticket[];

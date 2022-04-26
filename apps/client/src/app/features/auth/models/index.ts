@@ -1,4 +1,4 @@
-import { User, UserRoles } from '@core/models';
+import { User, UserRoles } from '@client/core/models';
 
 export interface SignUpCredentials {
   name: string;

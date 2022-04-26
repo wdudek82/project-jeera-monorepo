@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth/auth.service';
+import { AuthService } from '@client/auth/auth.service';
 import { first, Observable, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '@core/models';
+import { User } from '@client/core/models';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

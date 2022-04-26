@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth/auth.service';
+import { AuthService } from '@client/auth/auth.service';
 import { Observable } from 'rxjs';
-import { User } from '@core/models';
+import { User } from '@client/core/models';
 import { ToastrService } from "ngx-toastr";
 
 @Component({
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.checkAuth().subscribe({
-      next: () => {},
+      next: () => undefined,
       error: (_err) => {
         this.toastr.error('Something went wrong', 'Error');
       }

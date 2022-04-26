@@ -4,14 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { User } from '@core/models';
-import { PROJECT_ALIAS } from '@core/models/constants';
-import { Ticket } from '@tickets/models';
+import { User } from '@client/core/models';
+import { PROJECT_ALIAS } from '@client/core/models/constants';
+import { Ticket } from '@client/tickets/models';
 import {
   TicketDetailsModalComponent,
   TicketModalData,
 } from '../ticket-details-modal/ticket-details-modal.component';
-import { TicketsService } from '@tickets/tickets.service';
+import { TicketsService } from '@client/tickets/tickets.service';
 import { ToastrService } from "ngx-toastr";
 import { MatPaginator } from "@angular/material/paginator";
 

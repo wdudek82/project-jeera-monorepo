@@ -5,9 +5,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { FormService } from '@core/services/form.service';
-import { InputType } from '@shared/models/form';
-import { AuthService } from '@auth/auth.service';
+import { FormService } from '@client/core/services/form.service';
+import { InputType } from '@client/shared/models/form';
+import { AuthService } from '@client/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 

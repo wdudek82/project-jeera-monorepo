@@ -16,12 +16,12 @@
     "baseUrl": ".",
     "paths": {
       "@jeera/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@core/*": ["apps/client/src/app/core/*"],
-      "@shared/*": ["apps/client/src/app/shared/*"],
-      "@auth/*": ["apps/client/src/app/features/auth/*"],
-      "@tickets/*": ["apps/client/src/app/features/tickets/*"],
-      "@users-management/*": ["apps/client/src/app/features/users-management/*"],
-      "@environments/*": ["apps/client/src/environments/*"]
+      "@client/core/*": ["apps/client/src/app/core/*"],
+      "@client/shared/*": ["apps/client/src/app/shared/*"],
+      "@client/auth/*": ["apps/client/src/app/features/auth/*"],
+      "@client/tickets/*": ["apps/client/src/app/features/tickets/*"],
+      "@client/users-management/*": ["apps/client/src/app/features/users-management/*"],
+      "@client/environments/*": ["apps/client/src/environments/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
