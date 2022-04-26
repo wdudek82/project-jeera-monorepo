@@ -11,6 +11,7 @@ import {
   Session,
   UnauthorizedException,
 } from '@nestjs/common';
+import { SessionData } from 'express-session';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../entities/user.entity';
 import { AuthService } from '../services/auth.service';
@@ -19,10 +20,6 @@ import { SigninUserDto } from '../dtos/sigin-user.dto';
 import { UserDto } from '../dtos/user.dto';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { Role } from '../enums';
-
-export interface SessionData {
-  userId: number;
-}
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -62,7 +59,7 @@ export class AuthController {
   @Post('/signup')
   async signUp(
     @Body() body: CreateUserDto,
-    @Session() session: any,
+    @Session() session: SessionData,
   ): Promise<User> {
     // TODO: This rout is tempararily disabled.
     //  Users will be probably created only by admins.
@@ -87,7 +84,7 @@ export class AuthController {
 
   @Post('/signout')
   signOut(@Req() req: Request, @Res() res: Response): void {
-    req['session'] = null;
+    req.session = null;
     res.status(HttpStatus.RESET_CONTENT).json({});
   }
 }
