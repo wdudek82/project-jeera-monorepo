@@ -122,7 +122,7 @@ export class TicketDetailsModalComponent implements OnInit {
       }),
       comments: this.formBuilder.group({
         previous: this.formBuilder.array(
-          this.createCommentsFormGroupArray(this.data.ticket?.comments),
+          this.createCommentsFormGroupArray(ticket?.comments),
         ),
         new: this.formBuilder.group({
           author: { value: this.data.authorId, disabled: true },
@@ -141,7 +141,7 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   createUsersOptions(users: User[]): SelectOption[] {
-    const empty: SelectOption = { value: 0, viewValue: '-' };
+    const empty: SelectOption = { value: -1, viewValue: '-' };
     const result: SelectOption[] = users.map((u) => ({
       value: u.id,
       viewValue: u.name,
@@ -149,9 +149,7 @@ export class TicketDetailsModalComponent implements OnInit {
     return [empty, ...result];
   }
 
-  createCommentsFormGroupArray(comments: Comment[] | undefined): FormGroup[] {
-    if (!comments || comments.length === 0) return [];
-
+  createCommentsFormGroupArray(comments: Comment[] = []): FormGroup[] {
     return comments.map((c) =>
       this.formBuilder.group({
         author: [{ value: c.authorId, disabled: true }],
@@ -161,7 +159,7 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   createTicketsOptions(tickets: Ticket[]): SelectOption[] {
-    const empty: SelectOption = { value: 0, viewValue: '-' };
+    const empty: SelectOption = { value: -1, viewValue: '-' };
     const result = tickets.map((t) => ({
       value: t.id,
       viewValue: `${this.getTicketId(+t.id)} ${t.title}`,
