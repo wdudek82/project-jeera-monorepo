@@ -119,6 +119,17 @@ angular-cli-ghpages --dir=dist/client
 or use script: `npm run deploy:gh`
 
 ## To do
+- [ ] general
+  - [ ] research what is the function of lib `api-interfaces`, if it's usefull, and if you should move api and client interfaces to corresponding libs
+  - [ ] [research] create custom mat-input component to reduce code repetition in form templates
+  - [ ] dockerize the whole application 
+  - [ ] ...
+
+- [ ] write api test:
+  - [ ] ...
+
+- [ ] write client tests:
+  - [ ] ...
 
 - [ ] better error handling (interceptor, error pages)
 - [ ] separate sign-out page (?)
@@ -135,6 +146,17 @@ or use script: `npm run deploy:gh`
   - [x] editing existing tickets
   - [x] enable table pagination
   - [x] drag & drop breaks pagination
+  - [ ] additional fields on ticket form/ticket model:
+    - [ ] due to
+    - [ ] environment
+    - [ ] ticket type: epic, story, ticket, bug (initially they just labels)
+    - [ ] labels (creating, changing colors and names)
+  - [ ] user can create own statuses/board columns
+  - [ ] user can rearrange columns in the board
+  - [ ] user can create multiple projects with separate backlogs and boards
+  - [ ] hide input frames on blurred input fields
+  - [ ] ticket modal should be scrollable or resize in smaller viewports
+  - [ ] rearrange ticket form fields - move most dropdowns to the right side (similar to Trello or Jira)
   - [ ] add "environment" field (FE and BE)
   - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] include ticket id in details modal when updating
@@ -155,6 +177,8 @@ or use script: `npm run deploy:gh`
   - [ ] move inline styles to scss files
 - [ ] users
   - [x] users resolver
+  - [ ] admin can see both active and inactive users in users management page
+  - [ ] users management page is accessible only for admins
   - [ ] editing users data, changing role and active state
   - [ ] adding users
   - [ ] deleting users (soft delete)
@@ -170,4 +194,4 @@ or use script: `npm run deploy:gh`
   - [ ] add chat
 - [ ] color themes (light, dark, etc.)
 - [ ] add more languages (i18n)
-- [ ] dockerize the whole application
+
