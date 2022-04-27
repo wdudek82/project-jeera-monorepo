@@ -85,17 +85,10 @@ export class TicketDetailsModalComponent implements OnInit {
     return this.form.get('comments.new') as FormGroup;
   }
 
-  get previousCommentsFormGroups(): FormGroup[] {
-    const getCommentFormGroup = (comment: Comment): FormGroup =>
-      this.formBuilder.group({
-        author: [{ value: comment.authorId, disabled: true }],
-        content: [{ value: comment.content, disabled: true }],
-      });
-    const previousComments = this.data.ticket?.comments.map((c) =>
-      getCommentFormGroup(c),
-    );
-
-    return previousComments || [];
+  get formHeaderText(): string {
+    return this.data.ticket
+      ? `Ticket id: ${this.getTicketId(+this.data.ticket.id)}`
+      : 'Create a new ticket';
   }
 
   createForm(): void {
@@ -116,7 +109,7 @@ export class TicketDetailsModalComponent implements OnInit {
             disabled: true,
           },
         ],
-        assigneeId: [ticket?.assigneeId ?? 0],
+        assigneeId: [ticket?.assigneeId ?? -1],
         status: [
           {
             value: ticket?.status ?? this.statusOptions[0].value,
@@ -125,10 +118,12 @@ export class TicketDetailsModalComponent implements OnInit {
         ],
         priority: [ticket?.priority ?? this.priorityOptions[2].value],
         description: [ticket?.description ?? ''],
-        relatedTicketId: [ticket?.relatedTicketId ?? 0],
+        relatedTicketId: [ticket?.relatedTicketId ?? -1],
       }),
       comments: this.formBuilder.group({
-        previous: this.formBuilder.array(this.previousCommentsFormGroups),
+        previous: this.formBuilder.array(
+          this.createCommentsFormGroupArray(this.data.ticket?.comments),
+        ),
         new: this.formBuilder.group({
           author: { value: this.data.authorId, disabled: true },
           content: '',
@@ -152,6 +147,17 @@ export class TicketDetailsModalComponent implements OnInit {
       viewValue: u.name,
     }));
     return [empty, ...result];
+  }
+
+  createCommentsFormGroupArray(comments: Comment[] | undefined): FormGroup[] {
+    if (!comments || comments.length === 0) return [];
+
+    return comments.map((c) =>
+      this.formBuilder.group({
+        author: [{ value: c.authorId, disabled: true }],
+        content: [{ value: c.content, disabled: true }],
+      }),
+    );
   }
 
   createTicketsOptions(tickets: Ticket[]): SelectOption[] {
@@ -189,18 +195,16 @@ export class TicketDetailsModalComponent implements OnInit {
       ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
       : this.ticketsService.createTicket(ticketForm);
 
+    // TODO: Switch to updating individual fields after they have been touched and blurred.
+    //  Same for comments - save each individually on blur.
     submitAction$.subscribe({
       next: (ticket) => {
         this.onClose();
 
-        if (ticket) {
-          // this.data.tickets.push(ticket);
-          this.toastr.success('The new ticket has been created', 'Success');
-        } else {
-          // TODO: Switch to updating individual fields after they have been touched and blurred.
-          //  Same for comments - save after touched & blurred.
-          this.toastr.success('The ticket has been updated', 'Success');
-        }
+        const successMessage = ticket
+          ? 'The new ticket has been created'
+          : 'The ticket has been updated';
+        this.toastr.success(successMessage, 'Success');
       },
       error: (_err) => {
         this.toastr.error('Something went wrong', 'Error');

@@ -1,155 +1,156 @@
+<header>
+  <h2 mat-dialog-title>{{formHeaderText}}</h2>
+</header>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <h2 *ngIf="this.data.ticket">
-    Ticket id: {{ getTicketId(+this.data.ticket.id) }}
-  </h2>
-  <h2 *ngIf="!this.data.ticket">Create a new ticket</h2>
-
-  <!-- Ticket Body section -->
-  <section formGroupName="ticketBody">
-    <mat-form-field appearance="outline">
-      <mat-label>Title</mat-label>
-      <input matInput formControlName="title" />
-      <mat-error *ngIf="form.get('ticketBody.title')?.invalid">{{
-        getInputErrorMessage(form.get('ticketBody.title')!)
-      }}</mat-error>
-    </mat-form-field>
-
-    <section class="d-flex">
-      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
-        <mat-label>Author</mat-label>
-        <mat-select formControlName="authorId">
-          <mat-option
-            *ngFor="let author of usersOptions"
-            [value]="author.value"
-          >
-            {{ author.viewValue }}
-          </mat-option>
-        </mat-select>
+  <article mat-dialog-content>
+    <!-- Ticket Body section -->
+    <section formGroupName="ticketBody">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="form.get('ticketBody.title')?.invalid">{{
+          getInputErrorMessage(form.get('ticketBody.title')!)
+        }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="flex-grow-1">
-        <mat-label>Assignee</mat-label>
-        <mat-select formControlName="assigneeId">
-          <mat-option
-            *ngFor="let assignee of usersOptions"
-            [value]="assignee.value"
-          >
-            {{ assignee.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </section>
-
-    <section class="d-flex">
-      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option
-            *ngFor="let status of statusOptions"
-            [value]="status.value"
-          >
-            {{ status.viewValue | titlecase }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="flex-grow-1">
-        <mat-label>Priority</mat-label>
-        <mat-select formControlName="priority">
-          <mat-option
-            *ngFor="let priority of priorityOptions"
-            [value]="priority.value"
-          >
-            {{ priority.viewValue | titlecase }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </section>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
-      <textarea
-        matInput
-        cdkTextareaAutosize
-        formControlName="description"
-        rows="10"
-      ></textarea>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Related Ticket</mat-label>
-      <mat-select formControlName="relatedTicketId">
-        <mat-option
-          *ngFor="let ticket of ticketsOptions"
-          [value]="ticket.value"
-        >
-          {{ ticket.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </section>
-
-  <!-- Comments section -->
-  <section formGroupName="comments">
-    <!-- Previous comments -->
-    <ng-container *ngIf="previousComments.length">
-      <div
-        formArrayName="previous"
-        *ngFor="let comment of previousComments.controls; let i = index"
-        class="comment"
-      >
-        <mat-form-field [formGroupName]="i" class="comment__author">
-          <mat-select formControlName="author">
+      <section class="d-flex">
+        <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+          <mat-label>Author</mat-label>
+          <mat-select formControlName="authorId">
             <mat-option
               *ngFor="let author of usersOptions"
               [value]="author.value"
             >
-              by {{ author.viewValue }}
+              {{ author.viewValue }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field
-          [appearance]="previousComments.controls[i].disabled ? 'fill' : 'outline'"
-          [formGroupName]="i"
-          class="comment__content"
-        >
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            formControlName="content"
-          ></textarea>
+
+        <mat-form-field appearance="outline" class="flex-grow-1">
+          <mat-label>Assignee</mat-label>
+          <mat-select formControlName="assigneeId">
+            <mat-option
+              *ngFor="let assignee of usersOptions"
+              [value]="assignee.value"
+            >
+              {{ assignee.viewValue }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
-      </div>
-    </ng-container>
+      </section>
 
-    <!-- A new comment field -->
-    <mat-form-field
-      *ngIf="this.data.ticket"
-      formGroupName="new"
-      appearance="outline"
-      class="mt-3"
-    >
-      <!-- TODO: Fix label styles -->
-      <mat-label>Comment</mat-label>
-      <textarea
-        matInput
-        cdkTextareaAutosize
-        formControlName="content"
-        rows="5"
-      ></textarea>
-    </mat-form-field>
-  </section>
+      <section class="d-flex">
+        <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option
+              *ngFor="let status of statusOptions"
+              [value]="status.value"
+            >
+              {{ status.viewValue | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  <div mat-dialog-actions align="end">
+        <mat-form-field appearance="outline" class="flex-grow-1">
+          <mat-label>Priority</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option
+              *ngFor="let priority of priorityOptions"
+              [value]="priority.value"
+            >
+              {{ priority.viewValue | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          formControlName="description"
+          rows="10"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Related Ticket</mat-label>
+        <mat-select formControlName="relatedTicketId">
+          <mat-option
+            *ngFor="let ticket of ticketsOptions"
+            [value]="ticket.value"
+          >
+            {{ ticket.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <!-- Comments section -->
+    <section formGroupName="comments">
+      <!-- Previous comments -->
+      <ng-container *ngIf="previousComments.length">
+        <div
+          formArrayName="previous"
+          *ngFor="let comment of previousComments.controls; let i = index"
+          class="comment"
+        >
+          <mat-form-field [formGroupName]="i" class="comment__author">
+            <mat-select formControlName="author">
+              <mat-option
+                *ngFor="let author of usersOptions"
+                [value]="author.value"
+              >
+                by {{ author.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field
+            [appearance]="previousComments.controls[i].disabled ? 'fill' : 'outline'"
+            [formGroupName]="i"
+            class="comment__content"
+          >
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              formControlName="content"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <!-- A new comment field -->
+      <mat-form-field
+        *ngIf="this.data.ticket"
+        formGroupName="new"
+        appearance="outline"
+        class="mt-3"
+      >
+        <!-- TODO: Fix label styles -->
+        <mat-label>Comment</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          formControlName="content"
+          rows="5"
+        ></textarea>
+      </mat-form-field>
+    </section>
+  </article>
+
+  <aside mat-dialog-actions align="end">
     <button
       mat-raised-button
       color="primary"
-      class="mr-xs"
+      class=""
       [disabled]="form.invalid"
       type="submit"
     >
       Submit
     </button>
     <button mat-raised-button (click)="onClose()" type="button">Close</button>
-  </div>
+  </aside>
 </form>
