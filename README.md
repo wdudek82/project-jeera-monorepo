@@ -120,9 +120,17 @@ or use script: `npm run deploy:gh`
 
 ## To do
 - [ ] general
-  - [ ] research what is the function of lib `api-interfaces`, if it's usefull, and if you should move api and client interfaces to corresponding libs
+  - [ ] [research] what is the function of lib `api-interfaces`, if it's usefull, and if you should move api and client interfaces to corresponding libs
   - [ ] [research] create custom mat-input component to reduce code repetition in form templates
   - [ ] dockerize the whole application 
+  - [ ] add loaders when:
+    - [ ] ticket is created
+    - [ ] tickets are loaded
+    - [ ] users are loaded
+    - [ ] email is validated
+    - [ ] user signs-in
+    - [ ] user signs-up
+    - [ ] user signs-out
   - [ ] ...
 
 - [ ] write api test:

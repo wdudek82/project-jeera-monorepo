@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +10,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AuthHttpInterceptor } from './interceptors/auth-http.interceptor';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { HttpErrorInterceptor } from '@client/core/interceptors/http-error.interceptor';
 
 const components = [MainLayoutComponent, PageNotFoundComponent];
 
@@ -30,6 +31,7 @@ const components = [MainLayoutComponent, PageNotFoundComponent];
   ],
   exports: [...components],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
   ],
 })

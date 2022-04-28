@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@client/auth/auth.service';
-import { first, Observable, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '@client/core/models';
+import { first, Observable, switchMap, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '@client/auth/auth.service';
+import { User } from '@client/core/types';
 
 @Component({
   selector: 'app-main-layout',
@@ -32,7 +32,7 @@ export class MainLayoutComponent implements OnInit {
         ),
         switchMap(() => this.authService.signOut()),
       )
-      .subscribe((value) => {
+      .subscribe(() => {
         this.router.navigateByUrl('/auth/signin');
       });
   }

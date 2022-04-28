@@ -18,7 +18,6 @@ import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('users')
 @Serialize(UserDto)
-@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -31,11 +30,13 @@ export class UsersController {
   }
 
   @Get('/:id')
+  @UseGuards(AuthGuard)
   getUser(@Param('id') id: string): Promise<User> {
     return this.usersService.findOneById(+id);
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   getFilteredUsers(@Body() body: any): Promise<User[]> {
     // TODO: Implement users filters.
     // TODO: Use this endpoint instead getUsers with "email" query param.
@@ -43,6 +44,7 @@ export class UsersController {
   }
 
   @Patch('/:id')
+  @UseGuards(AuthGuard)
   updateUser(
     @Param('id') id: number,
     @Body() body: UpdateUserDto,
@@ -51,6 +53,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard)
   softDeleteUser(@Param('id') id: string): Promise<void> {
     return this.usersService.softDelete(+id);
   }

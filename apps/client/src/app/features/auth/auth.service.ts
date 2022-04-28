@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, ReplaySubject, tap, throwError } from 'rxjs';
 import { environment } from '@client/environments/environment';
-import { User } from '@client/core/models';
 import {
   CheckAuthRes,
   SignInCredentials,
-  SignInRes,
   SignUpCredentials,
-  SignUpRes,
 } from '@client/auth/models';
+import { User } from '@client/core/types';
 
 @Injectable({
   providedIn: 'root',
@@ -40,13 +38,13 @@ export class AuthService {
     );
   }
 
-  createUser(user: SignUpCredentials): Observable<SignUpRes> {
-    return this.http.post<SignUpRes>(`${this.apiUrl}/auth/create-user`, user);
+  createUser(user: SignUpCredentials): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/auth/create-user`, user);
   }
 
-  signIn(credentials: SignInCredentials): Observable<SignInRes> {
+  signIn(credentials: SignInCredentials): Observable<User> {
     return this.http
-      .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
+      .post<User>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
         tap(({ id, name, email, role }) => {
           this.signedInUserSubject.next({ id, name, email, role });

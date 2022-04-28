@@ -1,4 +1,4 @@
-import { User, UserRoles } from '@client/core/models';
+import { User, UserRoles } from '@client/core/types';
 
 export interface SignUpCredentials {
   name: string;
@@ -7,14 +7,10 @@ export interface SignUpCredentials {
   passwordConfirmation: string;
 }
 
-export interface SignUpRes extends User {}
-
 export interface SignInCredentials {
   email: string;
   password: string;
 }
-
-export interface SignInRes extends User {}
 
 export interface CheckAuthRes {
   authenticated: boolean;

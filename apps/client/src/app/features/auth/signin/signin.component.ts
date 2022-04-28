@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
+  FormBuilder, FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -10,6 +10,7 @@ import { InputType } from '@client/shared/models/form';
 import { AuthService } from '@client/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { isAuthenticationError } from '@client/core/types/enums';
 
 @Component({
   selector: 'app-signin',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-  form!: FormGroup;
+  form: FormGroup = new FormGroup({});
   hidePassword = true;
 
   constructor(
@@ -42,12 +43,12 @@ export class SigninComponent implements OnInit {
     });
   }
 
-  get email(): AbstractControl {
-    return this.form.get('email')!;
+  get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
-  get password(): AbstractControl {
-    return this.form.get('password')!;
+  get password(): FormControl {
+    return this.form.get('password') as FormControl;
   }
 
   get inputType(): InputType {
@@ -70,27 +71,9 @@ export class SigninComponent implements OnInit {
         this.router.navigateByUrl('/tickets');
       },
       error: (err) => {
-        console.log(err);
-        switch (err.status) {
-          case 404:
-            this.form.setErrors({ accountNotFound: true });
-            break;
-          case 400:
-            const { message } = err.error;
-            if (message === 'inactive account') {
-              this.form.setErrors({ inactiveAccount: true });
-            } else if (message === 'incorrect password') {
-              this.form.setErrors({ incorrectPassword: true });
-            }
-            break;
-          case 0:
-            this.toastr.error(
-              'Could not connect with server',
-              'Connection Error',
-            );
-            break;
-          default:
-            this.toastr.error('Something went wrong', 'Error');
+        const { message } = err.error;
+        if (isAuthenticationError(message)) {
+          this.form.setErrors({ [message]: true })
         }
       },
     });

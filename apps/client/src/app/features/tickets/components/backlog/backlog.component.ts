@@ -4,8 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { User } from '@client/core/models';
-import { PROJECT_ALIAS } from '@client/core/models/constants';
 import { Ticket } from '@client/tickets/models';
 import {
   TicketDetailsModalComponent,
@@ -14,13 +12,15 @@ import {
 import { TicketsService } from '@client/tickets/tickets.service';
 import { ToastrService } from "ngx-toastr";
 import { MatPaginator } from "@angular/material/paginator";
+import { User } from '@client/core/types';
+import { PROJECT_ALIAS } from '@client/core/types/constants';
 
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
   styleUrls: ['./backlog.component.scss'],
 })
-export class BacklogComponent implements OnInit, AfterViewInit {
+export class BacklogComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   title = 'learning-testing-2022-frontend';
@@ -37,9 +37,6 @@ export class BacklogComponent implements OnInit, AfterViewInit {
     private ticketsService: TicketsService,
     private toastr: ToastrService,
   ) {}
-
-  ngOnInit(): void {
-  }
 
   ngAfterViewInit(): void {
     this.getTickets();
@@ -60,9 +57,6 @@ export class BacklogComponent implements OnInit, AfterViewInit {
       next: (tickets) => {
         this.tickets = tickets;
         this.ticketsDataSource.data = this.tickets;
-      },
-      error: (err) => {
-        this.toastr.error('Reloading tickets failed', 'Error')
       },
     });
   }
@@ -117,10 +111,7 @@ export class BacklogComponent implements OnInit, AfterViewInit {
           ticket,
           authorId: ticket.authorId,
         });
-      },
-      error: (_err) => {
-        this.toastr.error('Something went wrong', 'Error')
-      },
+      }
     });
   }
 

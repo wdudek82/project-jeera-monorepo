@@ -33,11 +33,8 @@ export class FormService {
   }
 
   getFormErrorMessage(formGroup: FormGroup): string {
-    // if (formGroup.hasError('noConnection')) {
-    //   return 'No connection';
-    // }
-    if (formGroup.hasError('accountNotFound')) {
-      return 'Account not found';
+    if (formGroup.hasError('incorrectEmail')) {
+      return 'Incorrect email';
     }
     if (formGroup.hasError('incorrectPassword')) {
       return 'Incorrect password';

@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UsersService } from '@client/core/services/users.service';
-import { User } from '@client/core/models';
+import { User } from '@client/core/types';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +15,8 @@ export class UsersResolver implements Resolve<User[]> {
   constructor(private usersService: UsersService) {}
 
   resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
+    _route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot,
   ): Observable<User[]> {
     return this.usersService.getUsers();
   }

@@ -45,17 +45,17 @@ export class AuthService {
   async signIn(email: string, password: string): Promise<User> {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
-      throw new NotFoundException('incorrect email');
+      throw new NotFoundException('incorrectEmail');
     }
     if (!user.isActive) {
-      throw new BadRequestException('inactive account');
+      throw new BadRequestException('inactiveAccount');
     }
 
     const [salt, storedHash] = user.password.split('.');
 
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     if (storedHash != hash.toString('hex')) {
-      throw new BadRequestException('incorrect password');
+      throw new BadRequestException('incorrectPassword');
     }
     return user;
   }

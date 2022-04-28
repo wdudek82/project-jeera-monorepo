@@ -3,14 +3,13 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '@client/core/models';
 import { FormService } from '@client/core/services/form.service';
-import { PROJECT_ALIAS } from '@client/core/models/constants';
 import {
   Comment,
   Priority,
@@ -18,6 +17,8 @@ import {
   TicketStatus,
 } from '@client/tickets/models';
 import { TicketsService } from '@client/tickets/tickets.service';
+import { User } from '@client/core/types';
+import { PROJECT_ALIAS } from '@client/core/types/constants';
 
 export interface TicketModalData {
   tickets: Ticket[];
@@ -73,8 +74,8 @@ export class TicketDetailsModalComponent implements OnInit {
     this.usersOptions = this.createUsersOptions(this.data.users);
   }
 
-  get title(): FormGroup {
-    return this.form.get('ticketBody.title') as FormGroup;
+  get title(): FormControl {
+    return this.form.get('ticketBody.title') as FormControl;
   }
 
   get previousComments(): FormArray {
@@ -203,9 +204,6 @@ export class TicketDetailsModalComponent implements OnInit {
           ? 'The new ticket has been created'
           : 'The ticket has been updated';
         this.toastr.success(successMessage, 'Success');
-      },
-      error: (_err) => {
-        this.toastr.error('Something went wrong', 'Error');
       },
     });
   }

@@ -111,16 +111,7 @@ export class SignupComponent implements OnInit {
         // this.authForm.markAsUntouched();
         // this.authForm.updateValueAndValidity();
       },
-      error: (err) => {
-        console.log(err.status)
-
-        let title = err?.error?.error ? err.error.error : 'Error';
-        let message = 'Something went wrong';
-        if (err?.error?.message) {
-          const errorMsg = err.error.message;
-          message = Array.isArray(errorMsg) ? errorMsg.join('<br>') : errorMsg;
-        }
-        this.toastr.error(message, title);
+      error: (_err) => {
         this.form.enable();
       },
     });
