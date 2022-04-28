@@ -10,7 +10,7 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  signedIn$!: Observable<Partial<User> | null>;
+  signedIn$: Observable<Partial<User> | null>;
 
   constructor(private authService: AuthService, private toastr: ToastrService) {
     this.signedIn$ = this.authService.signedInUser$;
@@ -19,8 +19,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authService.checkAuth().subscribe({
       next: () => undefined,
-      error: (_err) => {
-        this.toastr.error('Something went wrong', 'Error');
+      error: (err) => {
+        let errorMessage = 'Something went wrong';
+        if (err.status === 0) {
+          errorMessage = 'Connection error';
+        }
+        this.toastr.error(errorMessage, 'Error');
       }
     });
   }

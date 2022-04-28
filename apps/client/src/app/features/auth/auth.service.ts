@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { catchError, Observable, ReplaySubject, tap, throwError } from 'rxjs';
 import { environment } from '@client/environments/environment';
 import { User } from '@client/core/models';
 import {
@@ -33,6 +33,10 @@ export class AuthService {
       tap((res) => {
         this.signedInUserSubject.next(res.signedInUser);
       }),
+      catchError((err) => {
+        this.signedInUserSubject.next(null);
+        return throwError(err);
+      })
     );
   }
 
@@ -45,7 +49,6 @@ export class AuthService {
       .post<SignInRes>(`${this.apiUrl}/auth/signin`, credentials)
       .pipe(
         tap(({ id, name, email, role }) => {
-
           this.signedInUserSubject.next({ id, name, email, role });
         }),
       );
