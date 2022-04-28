@@ -139,7 +139,9 @@ or use script: `npm run deploy:gh`
 - [ ] write client tests:
   - [ ] ...
 
-- [ ] better error handling (interceptor, error pages)
+- [ ] better error handling:
+  - [x] error interceptor
+  - [ ] separate error pages for 404 and 400
 - [ ] separate sign-out page (?)
 - [ ] sign-up view
   - [ ] validation should not be triggered on submitting
