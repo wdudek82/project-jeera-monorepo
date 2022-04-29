@@ -160,6 +160,9 @@ or use script: `npm run deploy:gh`
   - [x] comments visible under corresponding tickets
   - [x] adding new comments
   - [x] reset comment textarea after adding comment
+  - [x] hide submit comment button if there is no content after trimming white spaces
+  - [x] prevent creating comments when field is empty (after trimming)
+  - [x] (comment) when only white spaces has been submitted, only reset the new comment textarea
   - [ ] additional fields on ticket form/ticket model:
     - [ ] due to
     - [ ] environment

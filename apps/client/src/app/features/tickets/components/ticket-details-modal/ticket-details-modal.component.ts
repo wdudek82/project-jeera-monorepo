@@ -249,7 +249,10 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     }
 
     const comment: TicketComment = this.newComment.value;
-    if (!comment.content) return;
+    if (!comment.content.trim()) {
+      this.newComment.reset();
+      return;
+    }
 
     this.ticketsService.addComment(+ticket.id, comment).subscribe({
       next: (comment) => {
@@ -258,6 +261,13 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
         this.newComment.reset();
       },
     });
+  }
+
+  showCommentSubmitBtn(): boolean {
+    const isEdited = this.editedTextField === this.editableFields.COMMENT;
+    const containsNewContent =
+      this.newComment.dirty && this.newComment.value.content.trim();
+    return isEdited || containsNewContent;
   }
 
   onClose(): void {
