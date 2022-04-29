@@ -1,4 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import {
   AbstractControl,
   FormArray,
@@ -8,11 +9,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { debounceTime, pairwise, startWith, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { FormService } from '@client/core/services/form.service';
 import {
-  Comment,
+  TicketComment,
   Priority,
   Ticket,
   TicketStatus,
@@ -31,6 +31,11 @@ export interface TicketModalData {
 interface SelectOption {
   value: number | string;
   viewValue: string;
+}
+
+enum EditableFields {
+  DESCRIPTION = 'description',
+  COMMENT = 'comment',
 }
 
 @Component({
@@ -61,7 +66,8 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
   form: FormGroup = new FormGroup({});
   subscriptions = new Subscription();
 
-  editedTextField = '';
+  editableFields = EditableFields;
+  editedTextField: EditableFields | null = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: TicketModalData,
@@ -77,27 +83,45 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     this.ticketsOptions = this.createTicketsOptions(this.data.tickets);
     this.usersOptions = this.createUsersOptions(this.data.users);
 
-    this.handleFormChanges();
+    if (this.data.ticket) {
+      this.handleExistingTicketChanges();
+    }
   }
 
   get title(): FormControl {
     return this.form.get('ticketBody.title') as FormControl;
   }
 
+  get authorId(): FormControl {
+    return this.form.get('ticketBody.authorId') as FormControl;
+  }
+
   get assigneeId(): FormControl {
     return this.form.get('ticketBody.assigneeId') as FormControl;
+  }
+
+  get status(): FormControl {
+    return this.form.get('ticketBody.status') as FormControl;
+  }
+
+  get priority(): FormControl {
+    return this.form.get('ticketBody.priority') as FormControl;
+  }
+
+  get relatedTicketId(): FormControl {
+    return this.form.get('ticketBody.relatedTicketId') as FormControl;
   }
 
   get description(): FormControl {
     return this.form.get('ticketBody.description') as FormControl;
   }
 
-  get previousComments(): FormArray {
-    return this.form.get('comments.previous') as FormArray;
-  }
-
   get newComment(): FormGroup {
     return this.form.get('comments.new') as FormGroup;
+  }
+
+  get previousComments(): FormArray {
+    return this.form.get('comments.previous') as FormArray;
   }
 
   get formHeaderText(): string {
@@ -110,7 +134,6 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     const { ticket, authorId } = this.data;
     this.form = this.formBuilder.group({
       ticketBody: this.formBuilder.group({
-        description: [ticket?.description ?? ''],
         title: [
           ticket?.title ?? '',
           {
@@ -136,14 +159,15 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
           },
         ],
         priority: [ticket?.priority ?? this.priorityOptions[2].value],
+        description: [ticket?.description ?? ''],
         relatedTicketId: [ticket?.relatedTicketId ?? -1],
       }),
       comments: this.formBuilder.group({
         previous: this.formBuilder.array(
-          this.createCommentsFormGroupArray(ticket?.comments),
+          this.createCommentsFormGroups(ticket?.comments),
         ),
         new: this.formBuilder.group({
-          author: { value: this.data.authorId, disabled: true },
+          authorId: this.data.authorId,
           content: '',
         }),
       }),
@@ -167,7 +191,8 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     return [empty, ...result];
   }
 
-  createCommentsFormGroupArray(comments: Comment[] = []): FormGroup[] {
+  createCommentsFormGroups(comments: TicketComment[] = []): FormGroup[] {
+    console.log(comments);
     return [...comments].reverse().map((c) =>
       this.formBuilder.group({
         author: [{ value: c.authorId, disabled: true }],
@@ -190,6 +215,8 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    console.log('submitted');
+
     if (this.form.invalid) return;
     const ticketForm = this.form.getRawValue()['ticketBody'];
     const commentsForm = this.form.getRawValue()['comments'];
@@ -198,35 +225,39 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     console.log(ticketForm);
     console.log(commentsForm);
 
-    // An id of -1 is only a placeholder for null value. This is needed because null cannot be used
-    // as a default value in mat-select dropdown, and -1 has to be used instead.
-    // But it would not be recognised by the backend.
     const { assigneeId, relatedTicketId } = ticketForm;
-    ticketForm.assigneeId = assigneeId === -1 ? null : assigneeId;
-    ticketForm.relatedTicketId =
-      relatedTicketId === -1 ? null : relatedTicketId;
+    ticketForm.assigneeId = this.normaliseFieldValue('assigneeId', assigneeId);
+    ticketForm.relatedTicketId = this.normaliseFieldValue(
+      'relatedTicketId',
+      relatedTicketId,
+    );
 
-    // const { ticket } = this.data;
-    // const submitAction$ = ticket
-    //   ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
-    //   : this.ticketsService.createTicket(ticketForm);
-    //
-    // // TODO: Switch to updating individual fields after they have been touched and blurred.
-    // //  Same for comments - save each individually on blur.
-    // submitAction$.subscribe({
-    //   next: (ticket) => {
-    //     this.onClose();
-    //
-    //     const successMessage = ticket
-    //       ? 'The new ticket has been created'
-    //       : 'The ticket has been updated';
-    //     this.toastr.success(successMessage, 'Success');
-    //   },
-    // });
+    this.ticketsService.createTicket(ticketForm).subscribe({
+      next: (_ticket) => {
+        this.onClose();
+        this.toastr.success('The new ticket has been created', 'Success');
+      },
+    });
+  }
+
+  onAddComment(): void {
+    // TODO: add this option also for the description
+    const { ticket } = this.data;
+    if (!ticket) {
+      this.toastr.error('Ticket does not exist', 'Error');
+      throw new Error('Ticket does not exist');
+    }
+    this.ticketsService
+      .addComment(+ticket.id, this.newComment.value)
+      .subscribe({
+        next: (comment) => {
+          const commentsFormGroup = this.createCommentsFormGroups([comment]);
+          this.previousComments.insert(0, commentsFormGroup[0]);
+        },
+      });
   }
 
   onClose(): void {
-    // TODO: Save form onClose if changed
     this.dialogRef.close();
   }
 
@@ -234,39 +265,56 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     return this.formService.getInputErrorMessage(control);
   }
 
-  onFormControlFocus(name: string): void {
-    console.log(name);
-
+  onFormControlFocus(name: EditableFields): void {
     this.editedTextField = name;
+  }
+
+  handleExistingTicketChanges(): void {
+    [
+      { control: this.title, name: 'title' },
+      { control: this.authorId, name: 'authorId' },
+      { control: this.assigneeId, name: 'assigneeId' },
+      { control: this.status, name: 'status' },
+      { control: this.priority, name: 'priority' },
+      { control: this.description, name: 'description' },
+      { control: this.relatedTicketId, name: 'relatedTicketId' },
+    ].forEach(({ control, name }) => {
+      this.subscriptions.add(
+        control.valueChanges.subscribe((value) => {
+          this.persistFormFieldChange(name, value);
+        }),
+      );
+    });
+  }
+
+  persistFormFieldChange(name: string, value: string | number): void {
+    const { ticket } = this.data;
+    if (this.form.invalid || !ticket) return;
+
+    const normalizedValue = this.normaliseFieldValue(name, value);
+
+    this.ticketsService
+      .updateTicket(+ticket.id, { [name]: normalizedValue })
+      .subscribe({
+        next: (_ticket) => {
+          // do nothing
+        },
+      });
+  }
+
+  normaliseFieldValue(
+    name: string,
+    value: string | number,
+  ): string | number | null {
+    // An id of -1 is only a placeholder for null value. This is needed because null cannot be used
+    // as a default value in mat-select dropdown, and -1 has to be used instead.
+    // But it would not be recognised by the backend.
+    return ['assigneeId', 'relatedTicketId'].includes(name) && value === -1
+      ? null
+      : value;
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  private handleFormChanges(): void {
-    const initialTitle = this.title.value;
-    const titleSub = this.title.valueChanges
-      .pipe(
-        startWith(initialTitle),
-        pairwise(),
-        debounceTime(2000),
-      )
-      .subscribe((value) => {
-        console.log('title:', value);
-      });
-
-    const assigneeIdSub = this.assigneeId.valueChanges.subscribe((value) => {
-      console.log('assigneeId:', value);
-    });
-    const descriptionSub = this.description.valueChanges.subscribe((value) => {
-      console.log('description:', value);
-    });
-    const newCommentSub = this.newComment.valueChanges.subscribe((value) => {
-      console.log('newComment:', value);
-    });
-    [titleSub, assigneeIdSub, descriptionSub, newCommentSub].forEach((s) => {
-      this.subscriptions.add(s);
-    });
   }
 }

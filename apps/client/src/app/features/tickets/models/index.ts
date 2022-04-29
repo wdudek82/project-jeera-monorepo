@@ -17,7 +17,7 @@ export enum TicketStatus {
   CANCELLED = 'cancelled',
 }
 
-export interface Comment {
+export interface TicketComment {
   id: number;
   ticketId: number;
   content: string;
@@ -37,7 +37,7 @@ export interface Ticket {
   assigneeId: number | null;
   relatedTicketId: number | null;
   position: number | null;
-  comments: Comment[];
+  comments: TicketComment[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

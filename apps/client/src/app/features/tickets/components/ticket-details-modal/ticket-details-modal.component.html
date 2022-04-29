@@ -1,8 +1,9 @@
-<h2 mat-dialog-title>{{ formHeaderText }}</h2>
+<article mat-dialog-content>
+  <h2 mat-dialog-title>{{ formHeaderText }}</h2>
 
-<form [formGroup]="form">
-  <!-- Ticket Body section -->
-  <article mat-dialog-content>
+  <!--<form [formGroup]="form" (ngSubmit)="onSubmit()">-->
+  <form [formGroup]="form">
+    <!-- Ticket Body section -->
     <section formGroupName="ticketBody">
       <mat-form-field appearance="outline">
         <mat-label>Title</mat-label>
@@ -70,11 +71,16 @@
           matInput
           cdkTextareaAutosize
           formControlName="description"
-          rows="10"
-          (focus)="onFormControlFocus('description')"
-          (blur)="editedTextField = ''"
+          rows="5"
+          (focus)="onFormControlFocus(editableFields.DESCRIPTION)"
+          (blur)="editedTextField = null"
         ></textarea>
-        <button mat-raised-button *ngIf="editedTextField === 'description'">Save</button>
+        <button
+          mat-raised-button
+          *ngIf="editedTextField === editableFields.DESCRIPTION && data.ticket"
+        >
+          Save
+        </button>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -105,11 +111,17 @@
           matInput
           cdkTextareaAutosize
           formControlName="content"
-          rows="5"
-          (focus)="onFormControlFocus('comment')"
-          (blur)="editedTextField = ''"
+          rows="2"
+          (focus)="onFormControlFocus(editableFields.COMMENT)"
+          (blur)="editedTextField = null"
         ></textarea>
-        <button mat-raised-button *ngIf="editedTextField === 'comment'">Save</button>
+        <button
+          mat-raised-button
+          *ngIf="editedTextField === editableFields.COMMENT || newComment.dirty"
+          (click)="onAddComment()"
+        >
+          Save
+        </button>
       </mat-form-field>
 
       <!-- Previous comments -->
@@ -145,18 +157,19 @@
         </div>
       </ng-container>
     </section>
-  </article>
 
-  <aside mat-dialog-actions align="end">
-    <button
-      mat-raised-button
-      color="primary"
-      class=""
-      [disabled]="form.invalid"
-      type="submit"
-    >
-      Submit
-    </button>
-    <button mat-raised-button (click)="onClose()" type="button">Close</button>
-  </aside>
-</form>
+    <aside mat-dialog-actions align="end" *ngIf="!data.ticket">
+      <button
+        mat-raised-button
+        color="primary"
+        class=""
+        [disabled]="form.invalid"
+        type="submit"
+        (click)="onSubmit()"
+      >
+        Submit
+      </button>
+      <button mat-raised-button (click)="onClose()" type="button">Close</button>
+    </aside>
+  </form>
+</article>

@@ -186,6 +186,8 @@ or use script: `npm run deploy:gh`
   - [ ] board view
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
+  - [ ] ticket details modal should be always full size with scrollable background if needed (compare with Trello board)
+  - [ ] related ticket dropdown should not contain parent ticket
 - [ ] users
   - [x] users resolver
   - [ ] admin can see both active and inactive users in users management page
