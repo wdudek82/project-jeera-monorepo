@@ -10,11 +10,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 import { isAuthenticationError } from '@client/core/types/enums';
 
-interface HttpErrorMessage {
-  title: string;
-  message: string;
-}
-
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(private toastr: ToastrService) {}

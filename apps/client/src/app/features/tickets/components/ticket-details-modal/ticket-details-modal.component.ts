@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { debounceTime, pairwise, startWith, Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { FormService } from '@client/core/services/form.service';
 import {
@@ -37,7 +38,7 @@ interface SelectOption {
   templateUrl: './ticket-details-modal.component.html',
   styleUrls: ['./ticket-details-modal.component.scss'],
 })
-export class TicketDetailsModalComponent implements OnInit {
+export class TicketDetailsModalComponent implements OnInit, OnDestroy {
   priorityOptions: SelectOption[] = this.createSelectOptionsFromStringsArray([
     Priority.VERY_LOW,
     Priority.LOW,
@@ -58,6 +59,9 @@ export class TicketDetailsModalComponent implements OnInit {
   ticketsOptions: SelectOption[] = [];
   usersOptions: SelectOption[] = [];
   form: FormGroup = new FormGroup({});
+  subscriptions = new Subscription();
+
+  editedTextField = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: TicketModalData,
@@ -72,10 +76,20 @@ export class TicketDetailsModalComponent implements OnInit {
     this.createForm();
     this.ticketsOptions = this.createTicketsOptions(this.data.tickets);
     this.usersOptions = this.createUsersOptions(this.data.users);
+
+    this.handleFormChanges();
   }
 
   get title(): FormControl {
     return this.form.get('ticketBody.title') as FormControl;
+  }
+
+  get assigneeId(): FormControl {
+    return this.form.get('ticketBody.assigneeId') as FormControl;
+  }
+
+  get description(): FormControl {
+    return this.form.get('ticketBody.description') as FormControl;
   }
 
   get previousComments(): FormArray {
@@ -96,13 +110,17 @@ export class TicketDetailsModalComponent implements OnInit {
     const { ticket, authorId } = this.data;
     this.form = this.formBuilder.group({
       ticketBody: this.formBuilder.group({
+        description: [ticket?.description ?? ''],
         title: [
           ticket?.title ?? '',
-          [
-            Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(200),
-          ],
+          {
+            validators: [
+              Validators.required,
+              Validators.minLength(5),
+              Validators.maxLength(200),
+            ],
+            updateOn: 'blur',
+          },
         ],
         authorId: [
           {
@@ -118,7 +136,6 @@ export class TicketDetailsModalComponent implements OnInit {
           },
         ],
         priority: [ticket?.priority ?? this.priorityOptions[2].value],
-        description: [ticket?.description ?? ''],
         relatedTicketId: [ticket?.relatedTicketId ?? -1],
       }),
       comments: this.formBuilder.group({
@@ -151,7 +168,7 @@ export class TicketDetailsModalComponent implements OnInit {
   }
 
   createCommentsFormGroupArray(comments: Comment[] = []): FormGroup[] {
-    return comments.map((c) =>
+    return [...comments].reverse().map((c) =>
       this.formBuilder.group({
         author: [{ value: c.authorId, disabled: true }],
         content: [{ value: c.content, disabled: true }],
@@ -189,30 +206,67 @@ export class TicketDetailsModalComponent implements OnInit {
     ticketForm.relatedTicketId =
       relatedTicketId === -1 ? null : relatedTicketId;
 
-    const { ticket } = this.data;
-    const submitAction$ = ticket
-      ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
-      : this.ticketsService.createTicket(ticketForm);
-
-    // TODO: Switch to updating individual fields after they have been touched and blurred.
-    //  Same for comments - save each individually on blur.
-    submitAction$.subscribe({
-      next: (ticket) => {
-        this.onClose();
-
-        const successMessage = ticket
-          ? 'The new ticket has been created'
-          : 'The ticket has been updated';
-        this.toastr.success(successMessage, 'Success');
-      },
-    });
+    // const { ticket } = this.data;
+    // const submitAction$ = ticket
+    //   ? this.ticketsService.updateTicket(+ticket.id, ticketForm)
+    //   : this.ticketsService.createTicket(ticketForm);
+    //
+    // // TODO: Switch to updating individual fields after they have been touched and blurred.
+    // //  Same for comments - save each individually on blur.
+    // submitAction$.subscribe({
+    //   next: (ticket) => {
+    //     this.onClose();
+    //
+    //     const successMessage = ticket
+    //       ? 'The new ticket has been created'
+    //       : 'The ticket has been updated';
+    //     this.toastr.success(successMessage, 'Success');
+    //   },
+    // });
   }
 
   onClose(): void {
+    // TODO: Save form onClose if changed
     this.dialogRef.close();
   }
 
   getInputErrorMessage(control: AbstractControl): string {
     return this.formService.getInputErrorMessage(control);
+  }
+
+  onFormControlFocus(name: string): void {
+    console.log(name);
+
+    this.editedTextField = name;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private handleFormChanges(): void {
+    const initialTitle = this.title.value;
+    const titleSub = this.title.valueChanges
+      .pipe(
+        startWith(initialTitle),
+        pairwise(),
+        debounceTime(2000),
+      )
+      .subscribe((value) => {
+        console.log('title:', value);
+      });
+
+    const assigneeIdSub = this.assigneeId.valueChanges.subscribe((value) => {
+      console.log('assigneeId:', value);
+    });
+    const descriptionSub = this.description.valueChanges.subscribe((value) => {
+      console.log('description:', value);
+    });
+    const newCommentSub = this.newComment.valueChanges.subscribe((value) => {
+      console.log('newComment:', value);
+    });
+    [titleSub, assigneeIdSub, descriptionSub, newCommentSub].forEach((s) => {
+      this.subscriptions.add(s);
+    });
   }
 }

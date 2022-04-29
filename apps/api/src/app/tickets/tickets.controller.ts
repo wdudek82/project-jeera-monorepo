@@ -56,6 +56,7 @@ export class TicketsController {
 
   @Patch('/:id')
   updateTicket(@Param('id') id: string, @Body() body: any): Promise<Ticket> {
+    // TODO: use UpdateTicketDto instead of any
     return this.ticketsService.update(+id, body);
   }
 

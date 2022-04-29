@@ -1,8 +1,5 @@
 .mat-form-field {
   display: block;
-}
-
-.mat-form-field {
   margin-bottom: 0;
 }
 
@@ -19,11 +16,17 @@
         color: #000;
       }
 
+      .mat-form-field-flex {
+        background-color: transparent;
+      }
+
       textarea {
         height: calc(100% - 25px);
 
         &:disabled {
           resize: none;
+          overflow-x: hidden;
+          overflow-y: hidden;
         }
       }
     }

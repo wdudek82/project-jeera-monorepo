@@ -119,6 +119,7 @@ angular-cli-ghpages --dir=dist/client
 or use script: `npm run deploy:gh`
 
 ## To do
+
 - [ ] general
   - [ ] [research] what is the function of lib `api-interfaces`, if it's usefull, and if you should move api and client interfaces to corresponding libs
   - [ ] [research] create custom mat-input component to reduce code repetition in form templates
@@ -205,3 +206,7 @@ or use script: `npm run deploy:gh`
 - [ ] color themes (light, dark, etc.)
 - [ ] add more languages (i18n)
 
+- [ ] known bugs and issues
+  - [ ] show password button on signIn page is pluralised (should be in the singular form)
+  - [ ] email should be validated only when user submits signUp form
+  - [ ] inactive users are not visible on "manage users" page

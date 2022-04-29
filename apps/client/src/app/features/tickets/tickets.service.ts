@@ -24,7 +24,7 @@ export class TicketsService {
     return this.http.post<Ticket>(this.rootUrl, ticket);
   }
 
-  updateTicket(id: number, ticket: Ticket): Observable<Ticket> {
+  updateTicket(id: number, ticket: Partial<Ticket>): Observable<Ticket> {
     return this.http.patch<Ticket>(`${this.rootUrl}/${id}`, ticket);
   }
 }
