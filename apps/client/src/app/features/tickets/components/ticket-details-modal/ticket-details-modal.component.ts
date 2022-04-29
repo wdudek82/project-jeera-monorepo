@@ -247,14 +247,17 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
       this.toastr.error('Ticket does not exist', 'Error');
       throw new Error('Ticket does not exist');
     }
-    this.ticketsService
-      .addComment(+ticket.id, this.newComment.value)
-      .subscribe({
-        next: (comment) => {
-          const commentsFormGroup = this.createCommentsFormGroups([comment]);
-          this.previousComments.insert(0, commentsFormGroup[0]);
-        },
-      });
+
+    const comment: TicketComment = this.newComment.value;
+    if (!comment.content) return;
+
+    this.ticketsService.addComment(+ticket.id, comment).subscribe({
+      next: (comment) => {
+        const commentsFormGroup = this.createCommentsFormGroups([comment]);
+        this.previousComments.insert(0, commentsFormGroup[0]);
+        this.newComment.reset();
+      },
+    });
   }
 
   onClose(): void {

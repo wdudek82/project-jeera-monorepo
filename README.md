@@ -157,6 +157,9 @@ or use script: `npm run deploy:gh`
   - [x] editing existing tickets
   - [x] enable table pagination
   - [x] drag & drop breaks pagination
+  - [x] comments visible under corresponding tickets
+  - [x] adding new comments
+  - [x] reset comment textarea after adding comment
   - [ ] additional fields on ticket form/ticket model:
     - [ ] due to
     - [ ] environment
@@ -173,12 +176,10 @@ or use script: `npm run deploy:gh`
   - [ ] include ticket id in details modal when updating
   - [ ] change formatting for priority and status in table (remove underscore and add title case)
   - [ ] removing tickets (only soft delete)
-  - [ ] "Done" and "Cancelled" should be hidden by default (but searchable)
+  - [ ] tickets with status "Done" and "Cancelled" should be hidden by default (but searchable)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
-  - [ ] comments visible under corresponding tickets
-  - [ ] adding new comments
-  - [ ] editing (only) own comments
+  - [ ] editing (only own) comments
   - [ ] adding attachments to tickets (uploads)
   - [ ] adding attachments to comments (uploads) (?)
   - [ ] WYSIWYG editor in ticket description
