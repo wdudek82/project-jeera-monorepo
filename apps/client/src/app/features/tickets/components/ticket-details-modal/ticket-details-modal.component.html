@@ -1,7 +1,12 @@
 <article mat-dialog-content>
+  <aside class="d-flex justify-content-end">
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </aside>
+
   <h2 mat-dialog-title>{{ formHeaderText }}</h2>
 
-  <!--<form [formGroup]="form" (ngSubmit)="onSubmit()">-->
   <form [formGroup]="form">
     <!-- Ticket Body section -->
     <section formGroupName="ticketBody">
@@ -142,9 +147,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            [appearance]="
-              previousComments.controls[i].disabled ? 'fill' : 'outline'
-            "
+            appearance="outline"
             [formGroupName]="i"
             class="comment__content"
           >
@@ -154,6 +157,24 @@
               formControlName="content"
             ></textarea>
           </mat-form-field>
+          <aside class="comment__buttons-section" *ngIf="isOwnComment(i)">
+            <button
+              type="button"
+              class="btn btn-link comment__button"
+              aria-label="delete comment button"
+              [disabled]="true"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-link comment__button"
+              aria-label="delete comment button"
+              (click)="onRemoveComment(i)"
+            >
+              Delete
+            </button>
+          </aside>
         </div>
       </ng-container>
     </section>
@@ -169,7 +190,6 @@
       >
         Submit
       </button>
-      <button mat-raised-button (click)="onClose()" type="button">Close</button>
     </aside>
   </form>
 </article>

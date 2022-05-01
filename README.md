@@ -163,6 +163,14 @@ or use script: `npm run deploy:gh`
   - [x] hide submit comment button if there is no content after trimming white spaces
   - [x] prevent creating comments when field is empty (after trimming)
   - [x] (comment) when only white spaces has been submitted, only reset the new comment textarea
+  - [ ] (IN PROGRESS) deleting (only own) comments
+  - [ ] add some visual cue showing that comment is being deleted
+  - [ ] extract logic and template for comments form to a different component
+  - [ ] extract logic and template for ticket form to a different component
+  - [ ] after adding comment blur comment field
+  - [ ] editing (only own) comments
+  - [ ] close icon button in top right corner should not get autofocus when dialog is opened
+  - [ ] user can create multiple projects with separate backlogs and boards
   - [ ] additional fields on ticket form/ticket model:
     - [ ] due to
     - [ ] environment
@@ -170,8 +178,8 @@ or use script: `npm run deploy:gh`
     - [ ] labels (creating, changing colors and names)
   - [ ] user can create own statuses/board columns
   - [ ] user can rearrange columns in the board
-  - [ ] user can create multiple projects with separate backlogs and boards
-  - [ ] hide input frames on blurred input fields
+  - [ ] related ticket dropdown should not contain parent ticket
+  - [ ] change styling for blurred input fields
   - [ ] ticket modal should be scrollable or resize in smaller viewports
   - [ ] rearrange ticket form fields - move most dropdowns to the right side (similar to Trello or Jira)
   - [ ] add "environment" field (FE and BE)
@@ -182,7 +190,6 @@ or use script: `npm run deploy:gh`
   - [ ] tickets with status "Done" and "Cancelled" should be hidden by default (but searchable)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
-  - [ ] editing (only own) comments
   - [ ] adding attachments to tickets (uploads)
   - [ ] adding attachments to comments (uploads) (?)
   - [ ] WYSIWYG editor in ticket description
@@ -191,7 +198,6 @@ or use script: `npm run deploy:gh`
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
   - [ ] ticket details modal should be always full size with scrollable background if needed (compare with Trello board)
-  - [ ] related ticket dropdown should not contain parent ticket
 - [ ] users
   - [x] users resolver
   - [ ] admin can see both active and inactive users in users management page

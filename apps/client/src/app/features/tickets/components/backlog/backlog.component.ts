@@ -110,6 +110,8 @@ export class BacklogComponent implements AfterViewInit {
           users: this.users,
           ticket,
           authorId: ticket.authorId,
+          // TODO: Replace with a getter in AuthService
+          signedInUserId: this.signedInUserId,
         });
       }
     });
@@ -117,9 +119,8 @@ export class BacklogComponent implements AfterViewInit {
 
   openTicketModal(data: TicketModalData): void {
     const dialogRef = this.dialog.open(TicketDetailsModalComponent, {
-      width: '700px',
       data,
-      disableClose: false,
+      width: '700px',
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`The dialog was closed. Result: ${result}`);

@@ -36,4 +36,13 @@ export class TicketsService {
       .post<TicketComment>(`${this.rootUrl}/${ticketId}/comments`, comment)
       .pipe(tap((value) => console.log(value)));
   }
+
+  deleteComment(
+    ticketId: number,
+    commentId: number,
+  ): Observable<TicketComment> {
+    return this.http.delete<TicketComment>(
+      `${this.rootUrl}/${ticketId}/comments/${commentId}`,
+    );
+  }
 }

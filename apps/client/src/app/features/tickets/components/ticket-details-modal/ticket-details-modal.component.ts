@@ -26,6 +26,7 @@ export interface TicketModalData {
   ticket?: Ticket;
   users: User[];
   authorId: number;
+  signedInUserId?: number;
 }
 
 interface SelectOption {
@@ -167,7 +168,7 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
           this.createCommentsFormGroups(ticket?.comments),
         ),
         new: this.formBuilder.group({
-          authorId: this.data.authorId,
+          authorId: this.data.signedInUserId,
           content: '',
         }),
       }),
@@ -195,6 +196,7 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     console.log(comments);
     return [...comments].reverse().map((c) =>
       this.formBuilder.group({
+        id: [{value: c.id, disabled: true}],
         author: [{ value: c.authorId, disabled: true }],
         content: [{ value: c.content, disabled: true }],
       }),
@@ -215,16 +217,8 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    console.log('submitted');
-
     if (this.form.invalid) return;
     const ticketForm = this.form.getRawValue()['ticketBody'];
-    const commentsForm = this.form.getRawValue()['comments'];
-
-    // TODO: Remove when testing id done
-    console.log(ticketForm);
-    console.log(commentsForm);
-
     const { assigneeId, relatedTicketId } = ticketForm;
     ticketForm.assigneeId = this.normaliseFieldValue('assigneeId', assigneeId);
     ticketForm.relatedTicketId = this.normaliseFieldValue(
@@ -250,7 +244,8 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
 
     const comment: TicketComment = this.newComment.value;
     if (!comment.content.trim()) {
-      this.newComment.reset();
+      // TODO: Extract to resetNewCommentTextArea()
+      this.newComment.patchValue({ comment: '' });
       return;
     }
 
@@ -258,9 +253,31 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
       next: (comment) => {
         const commentsFormGroup = this.createCommentsFormGroups([comment]);
         this.previousComments.insert(0, commentsFormGroup[0]);
-        this.newComment.reset();
+        // TODO: Extract to resetNewCommentTextArea()
+        this.newComment.patchValue({ content: '' });
       },
     });
+  }
+
+  onRemoveComment(index: number): void {
+    const ticket = this.data.ticket;
+    const comment = this.previousComments.at(index);
+    const commentId = comment.get('id')?.value;
+
+    if (!ticket?.id || !commentId) {
+      this.toastr.error('Ticket or comment has not been found');
+      throw new Error('Ticket or comment has not been found');
+    }
+
+    this.ticketsService.deleteComment(+ticket.id, commentId).subscribe((value) => {
+      console.log(value);
+      this.previousComments.removeAt(index);
+    })
+  }
+
+  isOwnComment(index: number): boolean {
+    const comment = this.previousComments.at(index);
+    return this.data.signedInUserId === comment.get('author')?.value;
   }
 
   showCommentSubmitBtn(): boolean {
