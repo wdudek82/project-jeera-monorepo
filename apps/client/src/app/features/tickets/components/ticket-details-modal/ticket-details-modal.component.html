@@ -10,6 +10,7 @@
   <form [formGroup]="form">
     <!-- Ticket Body section -->
     <section formGroupName="ticketBody">
+      <!--  Title  -->
       <mat-form-field appearance="outline">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" />
@@ -19,6 +20,7 @@
       </mat-form-field>
 
       <section class="d-flex">
+        <!--  Author  -->
         <mat-form-field appearance="outline" class="flex-grow-1 me-2">
           <mat-label>Author</mat-label>
           <mat-select formControlName="authorId">
@@ -31,6 +33,7 @@
           </mat-select>
         </mat-form-field>
 
+        <!--  Assignee  -->
         <mat-form-field appearance="outline" class="flex-grow-1">
           <mat-label>Assignee</mat-label>
           <mat-select formControlName="assigneeId">
@@ -45,6 +48,7 @@
       </section>
 
       <section class="d-flex">
+        <!--  Status  -->
         <mat-form-field appearance="outline" class="flex-grow-1 me-2">
           <mat-label>Status</mat-label>
           <mat-select formControlName="status">
@@ -57,6 +61,7 @@
           </mat-select>
         </mat-form-field>
 
+        <!--  Priority  -->
         <mat-form-field appearance="outline" class="flex-grow-1">
           <mat-label>Priority</mat-label>
           <mat-select formControlName="priority">
@@ -70,6 +75,7 @@
         </mat-form-field>
       </section>
 
+      <!--  Description  -->
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
         <textarea
@@ -88,6 +94,7 @@
         </button>
       </mat-form-field>
 
+      <!--  Related ticket  -->
       <mat-form-field appearance="outline">
         <mat-label>Related Ticket</mat-label>
         <mat-select formControlName="relatedTicketId">
@@ -104,30 +111,28 @@
     <!-- Comments section -->
     <section formGroupName="comments">
       <!-- A new comment field -->
-      <mat-form-field
-        *ngIf="this.data.ticket"
-        formGroupName="new"
-        appearance="outline"
-        class="mt-3"
-      >
-        <!-- TODO: Fix label styles -->
-        <mat-label>Comment</mat-label>
-        <textarea
-          matInput
-          cdkTextareaAutosize
-          formControlName="content"
-          rows="2"
-          (focus)="onFormControlFocus(editableFields.COMMENT)"
-          (blur)="editedTextField = null"
-        ></textarea>
-        <button
-          mat-raised-button
-          *ngIf="showCommentSubmitBtn()"
-          (click)="onAddComment()"
+        <mat-form-field
+          *ngIf="this.data.ticket"
+          formGroupName="new"
+          appearance="outline"
         >
-          Save
-        </button>
-      </mat-form-field>
+          <mat-label>Comment</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            formControlName="content"
+            rows="2"
+            (focus)="onFormControlFocus(editableFields.COMMENT)"
+            (blur)="editedTextField = null"
+          ></textarea>
+          <button
+            mat-raised-button
+            *ngIf="showCommentSubmitBtn()"
+            (click)="onAddComment()"
+          >
+            Save
+          </button>
+        </mat-form-field>
 
       <!-- Previous comments -->
       <ng-container *ngIf="previousComments.length">
@@ -136,16 +141,12 @@
           *ngFor="let comment of previousComments.controls; let i = index"
           class="comment"
         >
-          <mat-form-field [formGroupName]="i" class="comment__author">
-            <mat-select formControlName="author">
-              <mat-option
-                *ngFor="let author of usersOptions"
-                [value]="author.value"
-              >
-                by {{ author.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div class="d-flex">
+            <span class="comment__author">{{ getCommentAuthorName(i) }}</span>
+            <span class="comment__timestamp">
+              {{ getCommentCreatedAt(i) | date: 'medium' }}
+            </span>
+          </div>
           <mat-form-field
             appearance="outline"
             [formGroupName]="i"

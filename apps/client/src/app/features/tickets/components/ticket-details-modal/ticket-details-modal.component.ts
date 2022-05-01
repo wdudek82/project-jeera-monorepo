@@ -196,16 +196,19 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     console.log(comments);
     return [...comments].reverse().map((c) =>
       this.formBuilder.group({
-        id: [{value: c.id, disabled: true}],
+        id: [{ value: c.id, disabled: true }],
         author: [{ value: c.authorId, disabled: true }],
         content: [{ value: c.content, disabled: true }],
+        createdAt: [{ value: c.createdAt, disabled: true }],
       }),
     );
   }
 
   createTicketsOptions(tickets: Ticket[]): SelectOption[] {
     const empty: SelectOption = { value: -1, viewValue: '-' };
-    const result = tickets.map((t) => ({
+    const result = tickets
+      .filter((t) => t.id !== this.data.ticket?.id)
+      .map((t) => ({
       value: t.id,
       viewValue: `${this.getTicketId(+t.id)} ${t.title}`,
     }));
@@ -269,10 +272,27 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
       throw new Error('Ticket or comment has not been found');
     }
 
-    this.ticketsService.deleteComment(+ticket.id, commentId).subscribe((value) => {
-      console.log(value);
-      this.previousComments.removeAt(index);
-    })
+    this.ticketsService
+      .deleteComment(+ticket.id, commentId)
+      .subscribe((value) => {
+        console.log(value);
+        this.previousComments.removeAt(index);
+      });
+  }
+
+  getCommentAuthorName(index: number): string {
+    const comment = this.previousComments.at(index);
+    const authorId = comment.get('author')?.value;
+    const author = this.data.users.find((u) => u.id === authorId);
+    if (!author) {
+      return 'unknown';
+    }
+    return author.name;
+  }
+
+  getCommentCreatedAt(index: number): string {
+    const comment = this.previousComments.at(index);
+    return comment.get('createdAt')?.value ?? '-';
   }
 
   isOwnComment(index: number): boolean {
