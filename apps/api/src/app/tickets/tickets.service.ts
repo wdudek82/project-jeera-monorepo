@@ -45,7 +45,7 @@ export class TicketsService {
   }
 
   async update(id: number, attrs: Partial<Ticket>): Promise<Ticket> {
-    const ticket = await this.repo.findOne(id);
+    const ticket = await this.repo.findOneBy({ id });
     if (!ticket) {
       throw new NotFoundException('ticket not found');
     }
@@ -54,7 +54,7 @@ export class TicketsService {
   }
 
   async remove(id: number): Promise<Ticket> {
-    const ticket = await this.repo.findOne(id);
+    const ticket = await this.repo.findOneBy({ id });
     if (!ticket) {
       throw new NotFoundException('ticket not found');
     }
@@ -62,7 +62,7 @@ export class TicketsService {
   }
 
   async softDelete(id: number): Promise<Ticket> {
-    const ticket = await this.repo.findOne(id);
+    const ticket = await this.repo.findOneBy({ id });
     if (!ticket) {
       throw new NotFoundException('ticket not found');
     }

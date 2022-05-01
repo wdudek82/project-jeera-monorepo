@@ -13,6 +13,10 @@ import { Ticket } from './entities/ticket.entity';
 import { Comment } from './entities/comment.entity';
 import { CommentsService } from './comments.service';
 import { AuthGuard } from '../guards/auth.guard';
+import { CreateTicketDto } from './dtos/create-ticket.dto';
+import { UpdateTicketDto } from './dtos/update-ticket.dto';
+import { CreateCommentDto } from './dtos/create-comment.dto';
+import { UpdateCommentDto } from './dtos/update-comment.dto';
 
 @Controller('tickets')
 @UseGuards(AuthGuard)
@@ -28,12 +32,12 @@ export class TicketsController {
   }
 
   @Get('/:id')
-  getTicket(@Param('id') id: string): any {
+  getTicket(@Param('id') id: string): Promise<Ticket> {
     return this.ticketsService.findById(+id);
   }
 
   @Post()
-  createTicket(@Body() body: any): Promise<Ticket> {
+  createTicket(@Body() body: CreateTicketDto): Promise<Ticket> {
     const {
       title,
       description,
@@ -55,8 +59,10 @@ export class TicketsController {
   }
 
   @Patch('/:id')
-  updateTicket(@Param('id') id: string, @Body() body: any): Promise<Ticket> {
-    // TODO: use UpdateTicketDto instead of any
+  updateTicket(
+    @Param('id') id: string,
+    @Body() body: UpdateTicketDto,
+  ): Promise<Ticket> {
     return this.ticketsService.update(+id, body);
   }
 
@@ -68,8 +74,8 @@ export class TicketsController {
   @Post('/:ticketId/comments')
   addComment(
     @Param('ticketId') ticketId: string,
-    @Body() body: any,
-  ): Promise<any> {
+    @Body() body: CreateCommentDto,
+  ): Promise<Comment> {
     const { content, authorId } = body;
 
     // TODO: Add better error handling for incorrect FKs:
@@ -80,7 +86,7 @@ export class TicketsController {
   @Patch('/:ticketId/comments/:commentId')
   updateTicketComment(
     @Param('commentId') commentId: string,
-    @Body() body: any,
+    @Body() body: UpdateCommentDto,
   ): Promise<Comment> {
     return this.commentsService.update(+commentId, body);
   }

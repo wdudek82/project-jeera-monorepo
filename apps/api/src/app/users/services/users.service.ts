@@ -18,7 +18,7 @@ export class UsersService {
     activityState: boolean[] = [true],
   ): Promise<User> {
     if (!id) return;
-    const user = await this.repo.findOne({ id, isActive: In(activityState) });
+    const user = await this.repo.findOneBy({ id, isActive: In(activityState) });
     if (!user) {
       throw new NotFoundException('user not found');
     }
@@ -26,7 +26,7 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
-    return await this.repo.findOne({ email });
+    return await this.repo.findOneBy({ email });
   }
 
   find(activityState: boolean[] = [true]): Promise<User[]> {
@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   async update(id: number, attrs: Partial<User>): Promise<User> {
-    const user = await this.repo.findOne({ id });
+    const user = await this.repo.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('user not found');
     }
@@ -43,7 +43,7 @@ export class UsersService {
   }
 
   async remove(id: number): Promise<void> {
-    const user = await this.repo.findOne({ id });
+    const user = await this.repo.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('user not found');
     }
@@ -51,7 +51,7 @@ export class UsersService {
   }
 
   async softDelete(id: number): Promise<void> {
-    const user = await this.repo.findOne({ id });
+    const user = await this.repo.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('user not found');
     }

@@ -17,7 +17,7 @@ export class CommentsService {
   }
 
   async update(id: number, attrs: Partial<Comment>): Promise<Comment> {
-    const comment = await this.repo.findOne(id);
+    const comment = await this.repo.findOneBy({ id });
     if (!comment) {
       throw new NotFoundException('comment not found');
     }
@@ -26,7 +26,7 @@ export class CommentsService {
   }
 
   async remove(id: number): Promise<Comment> {
-    const comment = await this.repo.findOne(id);
+    const comment = await this.repo.findOneBy({ id });
     if (!comment) {
       throw new NotFoundException('comment not found');
     }
@@ -34,7 +34,7 @@ export class CommentsService {
   }
 
   async softDelete(id: number): Promise<Comment> {
-    const comment = await this.repo.findOne(id);
+    const comment = await this.repo.findOneBy({ id });
     if (!comment) {
       throw new NotFoundException('comment not found');
     }

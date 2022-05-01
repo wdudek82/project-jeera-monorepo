@@ -2,11 +2,13 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity,
+  Entity, OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '../enums';
+import { Ticket } from '../../tickets/entities/ticket.entity';
+import { Comment } from '../../tickets/entities/comment.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -31,6 +33,12 @@ export class User {
 
   @Column({ default: false })
   isActive: boolean;
+
+  @OneToMany(() => Ticket, (ticket) => ticket.author)
+  tickets: Ticket[];
+
+  @OneToMany(() => Comment, (comment) => comment.author)
+  comments: Comment[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -52,7 +52,6 @@ export class Ticket {
     onDelete: 'SET NULL',
     onUpdate: 'NO ACTION',
   })
-
   @JoinColumn({ name: 'assigneeId' })
   assignee: User;
 
