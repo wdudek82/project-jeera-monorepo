@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <span class="brand">Jeera</span>
+  <a class="brand" routerLink="/">
+    <img src="assets/images/jeera-logo-1.png" alt="brand logo"/>
+    Jeera
+  </a>
 
   <ng-container *ngIf="signedIn$ | async">
     <button
@@ -37,9 +40,7 @@
 
   <span class="navbar-spacer"></span>
 
-  <ng-container
-    *ngIf="signedIn$ | async as signedInUser; else signupOrSignout"
-  >
+  <ng-container *ngIf="signedIn$ | async as signedInUser; else signupOrSignout">
     <button mat-flat-button color="primary" (click)="signOut()">
       <mat-icon>logout</mat-icon>
       Sign Out ({{ signedInUser.name }})
