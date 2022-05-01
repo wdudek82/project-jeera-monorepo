@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { SessionData } from 'express-session';
 import {
   BadRequestException,
   Body,
@@ -11,15 +12,12 @@ import {
   Session,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SessionData } from 'express-session';
-import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../entities/user.entity';
 import { AuthService } from '../services/auth.service';
 import { Serialize } from '../../interceptors/serialize.interceptor';
-import { SigninUserDto } from '../dtos/sigin-user.dto';
-import { UserDto } from '../dtos/user.dto';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { Role } from '../enums';
+import { CreateUserDto, SignInUserDto, UserDto } from '../dtos';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -73,7 +71,7 @@ export class AuthController {
 
   @Post('/signin')
   async signIn(
-    @Body() body: SigninUserDto,
+    @Body() body: SignInUserDto,
     @Session() session: SessionData,
   ): Promise<User> {
     const { email, password } = body;

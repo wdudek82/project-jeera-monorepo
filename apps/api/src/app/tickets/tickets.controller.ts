@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
@@ -13,10 +13,12 @@ import { Ticket } from './entities/ticket.entity';
 import { Comment } from './entities/comment.entity';
 import { CommentsService } from './comments.service';
 import { AuthGuard } from '../guards/auth.guard';
-import { CreateTicketDto } from './dtos/create-ticket.dto';
-import { UpdateTicketDto } from './dtos/update-ticket.dto';
-import { CreateCommentDto } from './dtos/create-comment.dto';
-import { UpdateCommentDto } from './dtos/update-comment.dto';
+import {
+  CreateCommentDto,
+  CreateTicketDto,
+  UpdateCommentDto,
+  UpdateTicketDto,
+} from './dtos';
 
 @Controller('tickets')
 @UseGuards(AuthGuard)

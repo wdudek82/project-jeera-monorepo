@@ -12,8 +12,7 @@ import {
 import { UsersService } from '../services/users.service';
 import { Serialize } from '../../interceptors/serialize.interceptor';
 import { AuthGuard } from '../../guards/auth.guard';
-import { UpdateUserDto } from '../dtos/update-user.dto';
-import { UserDto } from '../dtos/user.dto';
+import { UpdateUserDto, UserDto } from '../dtos';
 import { User } from '../entities/user.entity';
 
 @Controller('users')

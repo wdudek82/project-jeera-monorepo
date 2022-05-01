@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class SigninUserDto {
+export class SignInUserDto {
   @IsString()
   email: string;
 
