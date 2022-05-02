@@ -4,12 +4,16 @@ import {
   IsOptional,
   IsString,
   Min,
+  MinLength,
   ValidateIf,
 } from 'class-validator';
 import { Priority, Status } from '../enums';
+import { Transform } from 'class-transformer';
 
 export class CreateTicketDto {
   @IsString()
+  @MinLength(5)
+  @Transform(({ value }) => value.trim())
   title: string;
 
   @IsString()
@@ -20,10 +24,7 @@ export class CreateTicketDto {
   @Min(1)
   authorId!: number | null;
 
-  @ValidateIf((obj) => {
-    console.log(obj);
-    return obj.assigneeId !== null;
-  })
+  @ValidateIf((obj) => obj.assigneeId !== null)
   @IsNumber()
   @Min(1)
   assigneeId!: number | null;

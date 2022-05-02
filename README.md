@@ -198,7 +198,10 @@ or use script: `npm run deploy:gh`
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
   - [ ] ticket details modal should be always full size with scrollable background if needed (compare with Trello board)
-  - [ ] (fix) ticket title containing only white spaces should trigger validation error (trim)
+  - [ ] (fix) ticket title validation
+    - [ ] title containing only white spaces should trigger Frontend validation error (trim)
+    - [x] fix ticket dtos to reject titles with white-space only
+  - [x] fix comment content dtos to reject content containing only white-spaces
   - [ ] (fix) very long descriptions breaks ticket creation (backend error?)
 - [ ] users
   - [x] users resolver
