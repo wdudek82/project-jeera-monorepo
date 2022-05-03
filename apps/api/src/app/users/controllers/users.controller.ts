@@ -62,6 +62,8 @@ export class UsersController {
     @Res() res: Response,
   ): Promise<void> {
     // TODO: This endpoint should be accessible only for authorized users.
+    // TODO: I'm extracting isActive from body to prevent changing anything else.
+    //  Can this be made better? How to reject body containing anything else?
     await this.usersService.update(+id, { isActive: body.isActive });
     res.status(HttpStatus.NO_CONTENT).json();
   }
