@@ -4,13 +4,18 @@ import {
   IsOptional,
   IsString,
   Min,
+  MinLength,
   ValidateIf,
 } from 'class-validator';
 import { Priority, Status } from '../enums';
+import { Transform } from 'class-transformer';
 
 export class UpdateTicketDto {
   @IsOptional()
+  @ValidateIf((obj) => obj.description !== null)
   @IsString()
+  @MinLength(5)
+  @Transform(({ value }) => value.trim())
   title: string;
 
   @IsOptional()
