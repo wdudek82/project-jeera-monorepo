@@ -132,6 +132,8 @@ or use script: `npm run deploy:gh`
     - [ ] user signs-in
     - [ ] user signs-up
     - [ ] user signs-out
+  - [ ] streamlined defect settings for testers
+    - [ ] planned defects should be toggable programmatically
   - [ ] ...
 
 - [ ] write api test:
@@ -146,7 +148,8 @@ or use script: `npm run deploy:gh`
 - [ ] separate sign-out page (?)
 - [ ] sign-up view
   - [ ] validation should not be triggered on submitting
-  - [ ] email uniqueness checked only on submit
+  - [ ] email and user uniqueness validation fires only on submit
+  - [ ] add username uniqueness validation during sign-up
   - [ ] separate "show password" buttons for "password" and "password confirmation"
   - [ ] password mismatch error visible only under password confirmation
 - [ ] sign-in
@@ -163,6 +166,8 @@ or use script: `npm run deploy:gh`
   - [x] hide submit comment button if there is no content after trimming white spaces
   - [x] prevent creating comments when field is empty (after trimming)
   - [x] (comment) when only white spaces has been submitted, only reset the new comment textarea
+  - [x] related ticket dropdown should not contain parent ticket
+  - [x] when a new ticket is created make sure that ids of author and current user match
   - [ ] (IN PROGRESS) deleting (only own) comments
   - [ ] add some visual cue showing that comment is being deleted
   - [ ] extract logic and template for comments form to a different component
@@ -178,7 +183,7 @@ or use script: `npm run deploy:gh`
     - [ ] labels (creating, changing colors and names)
   - [ ] user can create own statuses/board columns
   - [ ] user can rearrange columns in the board
-  - [ ] related ticket dropdown should not contain parent ticket
+  - [ ] removing tickets (only soft delete)
   - [ ] change styling for blurred input fields
   - [ ] ticket modal should be scrollable or resize in smaller viewports
   - [ ] rearrange ticket form fields - move most dropdowns to the right side (similar to Trello or Jira)
@@ -186,7 +191,6 @@ or use script: `npm run deploy:gh`
   - [ ] implement sorting tickets table (by default sort by createdAt desc)
   - [ ] include ticket id in details modal when updating
   - [ ] change formatting for priority and status in table (remove underscore and add title case)
-  - [ ] removing tickets (only soft delete)
   - [ ] tickets with status "Done" and "Cancelled" should be hidden by default (but searchable)
   - [ ] correctly sort tickets by position (if not null) or by createdAt date
   - [ ] store new tickets positions in the Database
@@ -198,16 +202,17 @@ or use script: `npm run deploy:gh`
   - [ ] adding/removing tickets categories
   - [ ] move inline styles to scss files
   - [ ] ticket details modal should be always full size with scrollable background if needed (compare with Trello board)
-  - [ ] (fix) ticket title validation
-    - [ ] title containing only white spaces should trigger Frontend validation error (trim)
-    - [x] fix ticket dtos to reject titles with white-space only
-  - [x] fix comment content dtos to reject content containing only white-spaces
-  - [ ] (fix) very long descriptions breaks ticket creation (backend error?)
+
 - [ ] users
   - [x] users resolver
+  - [ ] add uniqueness check for username
+  - [ ] (IN PROGRESS) changing role and active state
+    - [x] create a separate endpoint for changing activation state
+    - [ ] endpoint for changing activation state should be accessible only for authorized users
+    - [ ] authorized users should be able to change user active state within the UI
   - [ ] admin can see both active and inactive users in users management page
   - [ ] users management page is accessible only for admins
-  - [ ] editing users data, changing role and active state
+  - [ ] editing users data
   - [ ] adding users
   - [ ] deleting users (soft delete)
   - [ ] move inline styles to scss files
@@ -227,3 +232,9 @@ or use script: `npm run deploy:gh`
   - [ ] show password button on signIn page is pluralised (should be in the singular form)
   - [ ] email should be validated only when user submits signUp form
   - [ ] inactive users are not visible on "manage users" page
+  - [ ] ticket title validation
+    - [ ] title containing only white spaces should trigger Frontend validation error (trim)
+  - [x] fix ticket dtos to reject titles with white-space only
+  - [x] fix comment content dtos to reject content containing only white-spaces
+  - [ ] very long descriptions breaks ticket creation (backend error?)
+  - [ ] change icon when cursor is above draggable content like tickets list

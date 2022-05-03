@@ -1,4 +1,6 @@
+import { Request } from 'express';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
@@ -39,25 +42,20 @@ export class TicketsController {
   }
 
   @Post()
-  createTicket(@Body() body: CreateTicketDto): Promise<Ticket> {
-    const {
-      title,
-      description,
-      authorId,
-      assigneeId,
-      priority,
-      status,
-      relatedTicketId,
-    } = body;
-    return this.ticketsService.create(
-      title,
-      description,
-      authorId,
-      assigneeId,
-      priority,
-      status,
-      relatedTicketId,
-    );
+  createTicket(
+    @Req() req: Request,
+    @Body() createTicketDto: CreateTicketDto,
+  ): Promise<Ticket> {
+    const currentUser = req['currentUser'];
+
+    if (currentUser.id !== createTicketDto.authorId) {
+      // Just to confirm data sent by the client.
+      throw new BadRequestException(
+        'Author is not a currently signed-in user!',
+      );
+    }
+
+    return this.ticketsService.create(createTicketDto);
   }
 
   @Patch('/:id')

@@ -2,30 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
-import { Priority, Status } from './enums';
+import { CreateTicketDto } from './dtos';
 
 @Injectable()
 export class TicketsService {
   constructor(@InjectRepository(Ticket) private repo: Repository<Ticket>) {}
 
-  create(
-    title: string,
-    description: string,
-    authorId: number,
-    assigneeId: number,
-    priority: Priority,
-    status: Status,
-    relatedTicketId: number,
-  ): Promise<Ticket> {
-    const ticket = this.repo.create({
-      title,
-      description,
-      authorId,
-      assigneeId,
-      priority,
-      status,
-      relatedTicketId,
-    });
+  async create(ticketData: CreateTicketDto): Promise<Ticket> {
+    const ticket = this.repo.create(ticketData);
     return this.repo.save(ticket);
   }
 
