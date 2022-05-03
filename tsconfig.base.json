@@ -15,13 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jeera/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@client/core/*": ["apps/client/src/app/core/*"],
-      "@client/shared/*": ["apps/client/src/app/shared/*"],
       "@client/auth/*": ["apps/client/src/app/features/auth/*"],
+      "@client/core/*": ["apps/client/src/app/core/*"],
+      "@client/environments/*": ["apps/client/src/environments/*"],
+      "@client/shared/*": ["apps/client/src/app/shared/*"],
       "@client/tickets/*": ["apps/client/src/app/features/tickets/*"],
-      "@client/users-management/*": ["apps/client/src/app/features/users-management/*"],
-      "@client/environments/*": ["apps/client/src/environments/*"]
+      "@client/users-management/*": [
+        "apps/client/src/app/features/users-management/*"
+      ],
+      "@jeera/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
