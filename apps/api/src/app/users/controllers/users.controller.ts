@@ -1,18 +1,21 @@
+import { Response } from 'express';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { Serialize } from '../../interceptors/serialize.interceptor';
 import { AuthGuard } from '../../guards/auth.guard';
-import { UpdateUserDto, UserDto } from '../dtos';
+import { SetUserActiveStateDto, UpdateUserDto, UserDto } from '../dtos';
 import { User } from '../entities/user.entity';
 
 @Controller('users')
@@ -49,6 +52,18 @@ export class UsersController {
     @Body() body: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(+id, body);
+  }
+
+  @Patch('/:id/activation-state')
+  @UseGuards(AuthGuard)
+  async setActiveState(
+    @Param('id') id: string,
+    @Body() body: SetUserActiveStateDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    // TODO: This endpoint should be accessible only for authorized users.
+    await this.usersService.update(+id, { isActive: body.isActive });
+    res.status(HttpStatus.NO_CONTENT).json();
   }
 
   @Delete('/:id')
