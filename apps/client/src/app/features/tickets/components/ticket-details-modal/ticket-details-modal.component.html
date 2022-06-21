@@ -7,6 +7,14 @@
 
   <h2 mat-dialog-title>{{ formHeaderText }}</h2>
 
+  <app-ticket-form
+    [tickets]="data.tickets"
+    [ticket]="data.ticket"
+    [authorId]="data.authorId"
+    [usersOptions]="usersOptions"
+    (formControlFocus)="onFormControlFocus($event)"
+  ></app-ticket-form>
+
   <form [formGroup]="form">
     <!-- Ticket Body section -->
     <section formGroupName="ticketBody">
@@ -111,28 +119,28 @@
     <!-- Comments section -->
     <section formGroupName="comments">
       <!-- A new comment field -->
-        <mat-form-field
-          *ngIf="this.data.ticket"
-          formGroupName="new"
-          appearance="outline"
+      <mat-form-field
+        *ngIf="this.data.ticket"
+        formGroupName="new"
+        appearance="outline"
+      >
+        <mat-label>Comment</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          formControlName="content"
+          rows="2"
+          (focus)="onFormControlFocus(editableFields.COMMENT)"
+          (blur)="editedTextField = null"
+        ></textarea>
+        <button
+          mat-raised-button
+          *ngIf="showCommentSubmitBtn()"
+          (click)="onAddComment()"
         >
-          <mat-label>Comment</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            formControlName="content"
-            rows="2"
-            (focus)="onFormControlFocus(editableFields.COMMENT)"
-            (blur)="editedTextField = null"
-          ></textarea>
-          <button
-            mat-raised-button
-            *ngIf="showCommentSubmitBtn()"
-            (click)="onAddComment()"
-          >
-            Save
-          </button>
-        </mat-form-field>
+          Save
+        </button>
+      </mat-form-field>
 
       <!-- Previous comments -->
       <ng-container *ngIf="previousComments.length">
@@ -141,7 +149,8 @@
           *ngFor="let comment of previousComments.controls; let i = index"
           class="comment"
         >
-          <div class="d-flex">
+          <div class="d-flex align-items-end">
+            <mat-icon>person</mat-icon>
             <span class="comment__author">{{ getCommentAuthorName(i) }}</span>
             <span class="comment__timestamp">
               {{ getCommentCreatedAt(i) | date: 'medium' }}

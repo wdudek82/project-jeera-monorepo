@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import {AbstractControl, FormGroup} from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
-  constructor() {}
-
   getInputErrorMessage(control: AbstractControl): string {
     if (control.hasError('required')) {
       return 'Field is required';

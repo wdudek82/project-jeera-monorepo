@@ -16,6 +16,7 @@ import {
   Priority,
   Ticket,
   TicketStatus,
+  SelectOption,
 } from '@client/tickets/models';
 import { TicketsService } from '@client/tickets/tickets.service';
 import { User } from '@client/core/types';
@@ -29,12 +30,7 @@ export interface TicketModalData {
   signedInUserId?: number;
 }
 
-interface SelectOption {
-  value: number | string;
-  viewValue: string;
-}
-
-enum EditableFields {
+export enum EditableFields {
   DESCRIPTION = 'description',
   COMMENT = 'comment',
 }
@@ -209,9 +205,9 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     const result = tickets
       .filter((t) => t.id !== this.data.ticket?.id)
       .map((t) => ({
-      value: t.id,
-      viewValue: `${this.getTicketId(+t.id)} ${t.title}`,
-    }));
+        value: t.id,
+        viewValue: `${this.getTicketId(+t.id)} ${t.title}`,
+      }));
     return [empty, ...result];
   }
 
@@ -246,9 +242,9 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
     }
 
     const comment: TicketComment = this.newComment.value;
-    if (!comment.content.trim()) {
-      // TODO: Extract to resetNewCommentTextArea()
-      this.newComment.patchValue({ comment: '' });
+    comment.content = comment.content.trim();
+    if (!comment.content) {
+      this.resetNewCommentTextArea();
       return;
     }
 
@@ -256,10 +252,13 @@ export class TicketDetailsModalComponent implements OnInit, OnDestroy {
       next: (comment) => {
         const commentsFormGroup = this.createCommentsFormGroups([comment]);
         this.previousComments.insert(0, commentsFormGroup[0]);
-        // TODO: Extract to resetNewCommentTextArea()
-        this.newComment.patchValue({ content: '' });
+        this.resetNewCommentTextArea();
       },
     });
+  }
+
+  resetNewCommentTextArea(): void {
+    this.newComment.patchValue({ comment: '' });
   }
 
   onRemoveComment(index: number): void {

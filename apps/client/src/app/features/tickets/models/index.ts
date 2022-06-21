@@ -42,3 +42,9 @@ export interface Ticket {
   updatedAt: string;
   deletedAt: string | null;
 }
+
+// TODO: Move to a separate file with form/material specific interfaces
+export interface SelectOption {
+  value: number | string;
+  viewValue: string;
+}

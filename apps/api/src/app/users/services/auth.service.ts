@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../dtos/create-user.dto';
+import { CreateUserDto } from '../dtos';
 import * as Buffer from 'buffer';
 
 const scrypt = promisify(_scrypt);
