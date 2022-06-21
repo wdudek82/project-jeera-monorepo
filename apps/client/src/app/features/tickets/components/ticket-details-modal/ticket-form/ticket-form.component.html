@@ -1,0 +1,101 @@
+<form [formGroup]="form">
+  <!-- Ticket Body section -->
+  <section formGroupName="ticketBody">
+    <!--  Title  -->
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="titleCtrl?.invalid">{{
+        getInputErrorMessage(titleCtrl)
+        }}</mat-error>
+    </mat-form-field>
+
+    <section class="d-flex">
+      <!--  Author  -->
+      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+        <mat-label>Author</mat-label>
+        <mat-select formControlName="authorId">
+          <mat-option
+            *ngFor="let author of usersOptions"
+            [value]="author.value"
+          >
+            {{ author.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!--  Assignee  -->
+      <mat-form-field appearance="outline" class="flex-grow-1">
+        <mat-label>Assignee</mat-label>
+        <mat-select formControlName="assigneeId">
+          <mat-option
+            *ngFor="let assignee of usersOptions"
+            [value]="assignee.value"
+          >
+            {{ assignee.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <section class="d-flex">
+      <!--  Status  -->
+      <mat-form-field appearance="outline" class="flex-grow-1 me-2">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option
+            *ngFor="let status of statusOptions"
+            [value]="status.value"
+          >
+            {{ status.viewValue | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!--  Priority  -->
+      <mat-form-field appearance="outline" class="flex-grow-1">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option
+            *ngFor="let priority of priorityOptions"
+            [value]="priority.value"
+          >
+            {{ priority.viewValue | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <!--  Description  -->
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        formControlName="description"
+        rows="5"
+        (focus)="onFormControlFocus(editableFields.DESCRIPTION)"
+        (blur)="editedTextField = null"
+      ></textarea>
+      <button
+        mat-raised-button
+        *ngIf="editedTextField === editableFields.DESCRIPTION && ticket"
+      >
+        Save
+      </button>
+    </mat-form-field>
+
+    <!--  Related ticket  -->
+    <mat-form-field appearance="outline">
+      <mat-label>Related Ticket</mat-label>
+      <mat-select formControlName="relatedTicketId">
+        <mat-option
+          *ngFor="let ticket of ticketsOptions"
+          [value]="ticket.value"
+        >
+          {{ ticket.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+</form>
